@@ -8,7 +8,7 @@ package se.good_omens.EliteDangerous_TraderHelper.common.enums;
  * @author Werner
  * @date Jun 8, 2015
  */
-public enum COMMIDITY_TYPES {
+public enum COMMIDITY_CATEGORY {
 	UNKNOWN
 	,	AGRICULTURE
 	,	TECHNOLOGY
