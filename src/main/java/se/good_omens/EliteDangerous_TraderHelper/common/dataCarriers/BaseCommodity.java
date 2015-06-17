@@ -125,7 +125,7 @@ public class BaseCommodity implements Commodity {
 		toReturn.setBuyingPrice( new Integer(node.getChildByName("buyingPrice").getTextValue()).intValue() );
 		toReturn.setSold( new Boolean(node.getChildByName("sellingPrice").getAttributeValue("sold")));
 		toReturn.setSellingPrice( new Integer(node.getChildByName("sellingPrice").getTextValue()).intValue() );
-		toReturn.setIllegal(node.getAttributeValue("illegal"));
+		toReturn.setIllegal(new Boolean(node.getAttributeValue("illegal")));
 		return toReturn;
 	}
 }
