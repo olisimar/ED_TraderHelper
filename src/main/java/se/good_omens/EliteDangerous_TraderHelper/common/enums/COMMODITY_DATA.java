@@ -142,7 +142,7 @@ public enum COMMODITY_DATA {
 		return COMMODITY_DATA.NOT_DEFINED;
 	}
 
-	public static Object fromInt(int id) {
+	public static COMMODITY_DATA fromInt(int id) {
 		for(COMMODITY_DATA item : COMMODITY_DATA.values()) {
 			if(item.getId() == id) {
 				return item;
