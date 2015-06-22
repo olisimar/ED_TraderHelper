@@ -1,15 +1,14 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.utils;
 
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_CATEGORY;
 import se.good_omens.xmlModel.XmlNode;
 
+import com.codesnippets4all.json.exceptions.JSONParsingException;
 import com.codesnippets4all.json.parsers.JSONParser;
 import com.codesnippets4all.json.parsers.JsonParserFactory;
 
@@ -24,40 +23,40 @@ public class JSONParserToXml {
 	private String	rawData;
 	private XmlNode	rawNode;
 
-	public JSONParserToXml(String file) {
+	public JSONParserToXml(String file, PARSE_TYPE type) {
 		try {
 			this.rawData = FileReader.readFile(file);
-			this.rawNode = this.parseJSON(rawData, PARSE_TYPE.COMMIDITIES);
-			this.rawNode = this.parseJSON(rawData, PARSE_TYPE.SYSTEMS);
-			this.rawNode = this.parseJSON(rawData, PARSE_TYPE.STATIONS_LITE);
-			this.rawNode = this.parseJSON(rawData, PARSE_TYPE.STATIONS);
-		} catch(SocketException e) {
+			this.rawNode = this.parseJSON(rawData, type);
+		} catch (Exception e) {
+			System.out.println(" ------ Type: "+ e.getClass().getSimpleName());
 			System.out.println(" --- Message: "+ e.getMessage());
 			e.printStackTrace();
 			System.out.println(" -----------------------------");
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
-
 	private XmlNode parseJSON(String data, PARSE_TYPE type) {
-		XmlNode toReturn = null;
-		switch (type) {
-
-			case COMMIDITIES:
-				break;
-			case SYSTEMS:
-				break;
-			case STATIONS_LITE:
-				break;
-			case STATIONS:
-			default:
-		}
 		JSONParser parser = JsonParserFactory.getInstance().newJsonParser();
 		TreeMap<Integer, String> categories = new TreeMap<Integer, String>();
 		TreeMap<Integer, TreeMap<String, String>> commodity = new TreeMap<Integer, TreeMap<String,String>>();
+		switch (type) {
+			case CATEGORIES:
+				return this.parseCategories(parser, data, categories);
+			case COMMIDITIES:
+				return this.parseCommiditiesBaseData(parser, data, commodity);
+			case SYSTEMS:
+				return this.parseSystemFile(parser, data);
+			case STATIONS_LITE:
+				return this.parseStationLite(parser, data);
+			case STATIONS:
+				return this.parseStation(parser, data);
+			default:
+				throw new IllegalArgumentException("You did not provide a proper option. You provided: "+ type);
+		}
+	}
 
+	private XmlNode parseCategories(JSONParser parser, String data, TreeMap<Integer, String> categories) {
+		XmlNode toReturn = new XmlNode("categories");
 		Map rootMap = parser.parseJson(data);
 		ArrayList mailElements = (ArrayList) rootMap.get("root");
 		for(Object item : mailElements) {
@@ -65,50 +64,126 @@ public class JSONParserToXml {
 				HashMap mItem = (HashMap) item;
 				HashMap category = (HashMap) mItem.get("category");
 				categories.put(new Integer((String) category.get("id")), category.get("name").toString());
-
-				// {"id":59,"name":"Imperial Slaves","category_id":10,"average_price":16058,"category":{"id":10,"name":"Slavery"}},
-				TreeMap<String, String> tmp = new TreeMap<String, String>();
-				tmp.put("id", mItem.get("id").toString());
-				tmp.put("name", mItem.get("name").toString());
-				tmp.put("categoryId", mItem.get("category_id").toString());
-				tmp.put("averagePrice", mItem.get("average_price").toString());
-
-				commodity.put(new Integer(mItem.get("id").toString()), tmp);
 			}
 		}
-
-		System.out.println(" --------------- ");
 		for(Entry<Integer, String> item : categories.entrySet()) {
-			System.out.println(", "+ item.getValue().toUpperCase() +"(\""+ item.getValue() +"\", "+ item.getKey() +")");
+			toReturn.addChildNode(new XmlNode("category").addAttribute("id", new Integer(item.getKey()).toString()).setTextValue(item.getValue()));
 		}
-		System.out.println(" --------------- ");
-		for(Entry<Integer, TreeMap<String, String>> item : commodity.entrySet()) {
-			TreeMap<String, String> comData = item.getValue();
-			String enumName = comData.get("name").toUpperCase().replaceAll(" ", "_").replaceAll("\\.", "").replaceAll("-", "_");
-			Integer price =  0;
-			if((comData.get("averagePrice") != null) && ((comData.get("averagePrice").toString() != null) && !comData.get("averagePrice").toString().equalsIgnoreCase("null"))) {
-				new Integer(comData.get("averagePrice").toString());
-			}
-			COMMODITY_CATEGORY current = COMMODITY_CATEGORY.fromInt(new Integer(comData.get("categoryId").toString()).intValue());
-			System.out.println(", "+ enumName +"("+ comData.get("id") +", \""+ comData.get("name") +"\", "+ price +", COMMODITY_CATEGORY."+ current.name() +")");
+		return toReturn;
+	}
 
+
+	/**
+	 * Returns a very limited XmlNode representation of the commodities. This is
+	 * merely definitions of the commodities present in the game, not all. See
+	 * the full Station parsing for sales information.
+	 * @param parser
+	 * @param data
+	 * @param categories
+	 * @param commodity
+	 * @return
+	 */
+	private XmlNode parseCommiditiesBaseData(JSONParser parser, String data, TreeMap<Integer, TreeMap<String, String>> commodity) {
+		XmlNode toReturn = new XmlNode("commodities");
+		Map rootMap = parser.parseJson(data);
+		ArrayList mailElements = (ArrayList) rootMap.get("root");
+		// {"id":59,"name":"Imperial Slaves","category_id":10,"average_price":16058,"category":{"id":10,"name":"Slavery"}},
+		//				TreeMap<String, String> tmp = new TreeMap<String, String>();
+		//				tmp.put("id", mItem.get("id").toString());
+		//				tmp.put("name", mItem.get("name").toString());
+		//				tmp.put("categoryId", mItem.get("category_id").toString());
+		//				tmp.put("averagePrice", mItem.get("average_price").toString());
+		//
+		//				commodity.put(new Integer(mItem.get("id").toString()), tmp);
+		for(Object item : mailElements) {
+			if(item instanceof HashMap) {
+				HashMap mItem = (HashMap) item;
+
+				//				TreeMap<String, String> tmp = new TreeMap<String, String>();
+				XmlNode comm = new XmlNode("commodity").addAttribute("id", mItem.get("id").toString());
+				comm.addChildNode(new XmlNode("name").setTextValue(mItem.get("name").toString()));
+				Integer avPrice = new Integer(0);
+				try {
+					avPrice = new Integer(mItem.get("average_price").toString()).intValue();
+				} catch(Exception e) {}
+				XmlNode price = new XmlNode("averagePrice").setTextValue(avPrice.toString());
+				comm.addChildNode(price);
+				XmlNode category = new XmlNode("category").addAttribute("id", mItem.get("category_id").toString());
+				comm.addChildNode(category);
+				toReturn.addChildNode(comm);
+			}
 		}
-		System.out.println(" --------------- ");
 
 		return toReturn;
 	}
 
-	public XmlNode parseSystemFile(String data) {
+
+	public XmlNode parseSystemFile(JSONParser parser, String data) {
+		XmlNode toReturn = new XmlNode("systems");
 		/* ,{
 		 *    "id":2,"name":"1 Geminorum","x":19.78125,"y":3.5625,"z":-153.8125,"faction":"1 Geminorum Liberals","population":141727,
 		 *    "government":"Democracy","allegiance":"Federation","state":"None","security":"Medium","primary_economy":"Terraforming",
 		 *    "needs_permit":0,"updated_at":1430931879
 		 *  }
 		 */
-		return new XmlNode("Nutting");
+		Map rootMap = new HashMap();
+		try {
+			rootMap = parser.parseJson(data);
+		} catch(JSONParsingException e) {
+			System.out.println(" --------- ");
+			System.out.println(e.getLocalizedMessage());
+			System.out.println(" --------- ");
+		}
+		ArrayList mailElements = (ArrayList) rootMap.get("root");
+		for(Object item : mailElements) {
+			if(item instanceof HashMap) {
+				HashMap mItem = (HashMap) item;
+				XmlNode system = new XmlNode("system");
+				system.addChildNode(new XmlNode("id").setTextValue(mItem.get("id").toString()).addAttribute("updated", mItem.get("updated_at").toString()));
+				system.addChildNode(new XmlNode("name").setTextValue(mItem.get("name").toString()).addAttribute("needsPermit", new Boolean(mItem.get("needs_permit").toString()).toString()));
+				XmlNode coords = new XmlNode("coordinates").addAttribute("x", mItem.get("x").toString()).addAttribute("y", mItem.get("y").toString()).addAttribute("z", mItem.get("z").toString());
+				system.addChildNode(coords);
+				XmlNode governance = new XmlNode("governance");
+				try {
+					governance.addChildNode(new XmlNode("faction").setTextValue(mItem.get("faction").toString()));
+				} catch(JSONParsingException e) {
+					governance.addChildNode(new XmlNode("faction").setTextValue("Unknown - Not Provided"));
+				}
+				try {
+					governance.addChildNode(new XmlNode("government").setTextValue(mItem.get("government").toString()));
+				} catch(JSONParsingException e) {
+					governance.addChildNode(new XmlNode("government").setTextValue("Unknown - Not Provided"));
+				}
+				try {
+					governance.addChildNode(new XmlNode("allegiance").setTextValue(mItem.get("allegiance").toString()));
+				} catch(JSONParsingException e) {
+					governance.addChildNode(new XmlNode("allegiance").setTextValue("Unknown - Not Provided"));
+				}
+				try {
+					governance.addChildNode(new XmlNode("state").setTextValue(mItem.get("state").toString()));
+				} catch(JSONParsingException e) {
+					governance.addChildNode(new XmlNode("state").setTextValue("Unknown - Not Provided"));
+				}
+				system.addChildNode(governance);
+
+				try {
+					system.addChildNode(new XmlNode("security").setTextValue(mItem.get("security").toString()));
+				} catch(JSONParsingException e) {
+					system.addChildNode(new XmlNode("security").setTextValue("Unknown - Not Provided"));
+				}
+				try {
+					system.addChildNode(new XmlNode("primaryEconomy").setTextValue(mItem.get("primary_economy").toString()));
+				} catch(JSONParsingException e) {
+					system.addChildNode(new XmlNode("primaryEconomy").setTextValue("Unknown - Not Provided"));
+				}
+				toReturn.addChildNode(system);
+			}
+		}
+
+		return toReturn;
 	}
 
-	public XmlNode parseStationLite(String data) {
+	public XmlNode parseStationLite(JSONParser parser, String data) {
 		/* ,{
 		 * 		"id":1,"name":"Bain Colony","system_id":18370,"max_landing_pad_size":"L","distance_to_star":16253,
 		 * 		"faction":"","government":null,"allegiance":null,"state":null,"type":"Unknown Starport","has_blackmarket":0,
@@ -120,7 +195,7 @@ public class JSONParserToXml {
 		return new XmlNode("Nutting");
 	}
 
-	public XmlNode parseStation(String data) {
+	public XmlNode parseStation(JSONParser parser, String data) {
 		/* ,{
 		 * 		"id":1,"name":"Bain Colony","system_id":18370,"max_landing_pad_size":"L","distance_to_star":16253,"faction":"",
 		 * 		"government":null,"allegiance":null,"state":null,"type":"Unknown Starport","has_blackmarket":0,"has_commodities":1,
