@@ -9,10 +9,11 @@ import se.good_omens.xmlModel.XmlNode;
 
 public class BasicFileTests {
 
-	public static String filePath = "file:///C:/OWN/LunaWorkspace/ED_TraderHelper/rawData/";
+	public static String protocol = "file:///";
+	public static String filePath = "C:/OWN/LunaWorkspace/ED_TraderHelper/rawData/";
 
 
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void test_fileReadCategories() {
 		JSONParserToXml parser = new JSONParserToXml(filePath +"commodities.json", PARSE_TYPE.CATEGORIES);
 		System.out.println(parser.getNodeData().xmlPrint());
@@ -35,7 +36,7 @@ public class BasicFileTests {
 			}
 		}
 	}
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void test_fileReadSystems() {
 		JSONParserToXml parser = new JSONParserToXml(filePath +"systems.json", PARSE_TYPE.SYSTEMS);
 		System.out.println(parser.getNodeData().xmlPrint());

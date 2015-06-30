@@ -59,4 +59,8 @@ public enum COMMODITY_CATEGORY {
 		}
 		return COMMODITY_CATEGORY.NOT_DEFINED;
 	}
+
+	public String getStringIndex() {
+		return new Integer(this.index).toString();
+	}
 }

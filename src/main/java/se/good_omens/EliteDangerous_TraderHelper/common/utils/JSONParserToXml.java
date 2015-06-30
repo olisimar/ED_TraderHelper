@@ -1,17 +1,16 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.FileReader;
+import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_CATEGORY;
 import se.good_omens.xmlModel.XmlNode;
-
-import com.codesnippets4all.json.exceptions.JSONParsingException;
-import com.codesnippets4all.json.parsers.JSONParser;
-import com.codesnippets4all.json.parsers.JsonParserFactory;
-
 /**
  * Parses a file that contains json data into a XmlModel
  *
@@ -22,11 +21,13 @@ public class JSONParserToXml {
 
 	private String	rawData;
 	private XmlNode	rawNode;
+	private FileReader	reader;
 
 	public JSONParserToXml(String file, PARSE_TYPE type) {
 		try {
-			this.rawData = FileReader.readFile(file);
-			this.rawNode = this.parseJSON(rawData, type);
+			this.reader = new FileReader(file);
+			JSONParser jsonParser = new JSONParser();
+			this.rawNode = this.parseJSON(jsonParser, type);
 		} catch (Exception e) {
 			System.out.println(" ------ Type: "+ e.getClass().getSimpleName());
 			System.out.println(" --- Message: "+ e.getMessage());
@@ -34,6 +35,92 @@ public class JSONParserToXml {
 			System.out.println(" -----------------------------");
 		}
 	}
+
+	private XmlNode parseJSON(JSONParser jsonParser, PARSE_TYPE type) {
+		switch (type) {
+			case CATEGORIES:
+				return this.parseCategories(jsonParser);
+			case COMMIDITIES:
+				return this.parseCommiditiesBaseData(jsonParser);
+			case SYSTEMS:
+				return this.parseSystemFile(jsonParser);
+			case STATIONS_LITE:
+				return this.parseStationLite(jsonParser);
+			case STATIONS:
+				return this.parseStation(jsonParser);
+			default:
+				throw new IllegalArgumentException("You did not provide a proper option. You provided: "+ type);
+		}
+	}
+
+	private XmlNode parseCategories(JSONParser jsonParser) {
+		XmlNode categories = new XmlNode("categories");
+		TreeMap<Integer, XmlNode> tmp = new TreeMap<Integer, XmlNode>();
+		try {
+			Object commodities = jsonParser.parse(reader);
+			if(commodities instanceof JSONArray) {
+				Iterator iter = ((JSONArray)commodities).iterator();
+				while(iter.hasNext()) {
+					XmlNode cat = createCategory(iter.next());
+					if(cat != null) {
+						tmp.put(new Integer(cat.getAttributeValue("id")), cat);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		for(Entry<Integer, XmlNode> item : tmp.entrySet()) {
+			categories.addChildNode(item.getValue());
+		}
+		return categories;
+	}
+
+	private XmlNode createCategory(Object next) {
+		if(next instanceof JSONObject) {
+			JSONObject jCategory = (JSONObject) next;
+			if(next instanceof JSONObject) {
+				JSONObject jCat = (JSONObject) next;
+				if(jCat.get("category") instanceof JSONObject) {
+					JSONObject cat = (JSONObject) jCat.get("category");
+					Long id = (Long) cat.get("id");
+					if(id != null) {
+						COMMODITY_CATEGORY eCat = COMMODITY_CATEGORY.fromInt(id.intValue());
+						return new XmlNode("category").addAttribute("id", eCat.getStringIndex()).setTextValue(eCat.getName());
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	private XmlNode parseCommiditiesBaseData(JSONParser jsonParser) {
+
+		return null;
+	}
+
+	private XmlNode parseSystemFile(JSONParser jsonParser) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private XmlNode parseStationLite(JSONParser jsonParser) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private XmlNode parseStation(JSONParser jsonParser) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	/**
+	 * DEFUNCT!!! REFerEnCE ONLY
+	 * /
+
+
+
 
 	private XmlNode parseJSON(String data, PARSE_TYPE type) {
 		JSONParser parser = JsonParserFactory.getInstance().newJsonParser();
@@ -82,7 +169,7 @@ public class JSONParserToXml {
 	 * @param categories
 	 * @param commodity
 	 * @return
-	 */
+	 * /
 	private XmlNode parseCommiditiesBaseData(JSONParser parser, String data, TreeMap<Integer, TreeMap<String, String>> commodity) {
 		XmlNode toReturn = new XmlNode("commodities");
 		Map rootMap = parser.parseJson(data);
@@ -121,11 +208,11 @@ public class JSONParserToXml {
 	public XmlNode parseSystemFile(JSONParser parser, String data) {
 		XmlNode toReturn = new XmlNode("systems");
 		/* ,{
-		 *    "id":2,"name":"1 Geminorum","x":19.78125,"y":3.5625,"z":-153.8125,"faction":"1 Geminorum Liberals","population":141727,
-		 *    "government":"Democracy","allegiance":"Federation","state":"None","security":"Medium","primary_economy":"Terraforming",
-		 *    "needs_permit":0,"updated_at":1430931879
-		 *  }
-		 */
+	 *    "id":2,"name":"1 Geminorum","x":19.78125,"y":3.5625,"z":-153.8125,"faction":"1 Geminorum Liberals","population":141727,
+	 *    "government":"Democracy","allegiance":"Federation","state":"None","security":"Medium","primary_economy":"Terraforming",
+	 *    "needs_permit":0,"updated_at":1430931879
+	 *  }
+	 * /
 		Map rootMap = new HashMap();
 		try {
 			rootMap = parser.parseJson(data);
@@ -185,32 +272,34 @@ public class JSONParserToXml {
 
 	public XmlNode parseStationLite(JSONParser parser, String data) {
 		/* ,{
-		 * 		"id":1,"name":"Bain Colony","system_id":18370,"max_landing_pad_size":"L","distance_to_star":16253,
-		 * 		"faction":"","government":null,"allegiance":null,"state":null,"type":"Unknown Starport","has_blackmarket":0,
-		 * 		"has_commodities":1,"has_refuel":null,"has_repair":null,"has_rearm":null,"has_outfitting":null,"has_shipyard":null,
-		 * 		"import_commodities":[],"export_commodities":[],"prohibited_commodities":[],"economies":[],
-		 * 		"updated_at":1429408824
-		 * }
-		 */
+	 * 		"id":1,"name":"Bain Colony","system_id":18370,"max_landing_pad_size":"L","distance_to_star":16253,
+	 * 		"faction":"","government":null,"allegiance":null,"state":null,"type":"Unknown Starport","has_blackmarket":0,
+	 * 		"has_commodities":1,"has_refuel":null,"has_repair":null,"has_rearm":null,"has_outfitting":null,"has_shipyard":null,
+	 * 		"import_commodities":[],"export_commodities":[],"prohibited_commodities":[],"economies":[],
+	 * 		"updated_at":1429408824
+	 * }
+	 * /
 		return new XmlNode("Nutting");
 	}
 
 	public XmlNode parseStation(JSONParser parser, String data) {
 		/* ,{
-		 * 		"id":1,"name":"Bain Colony","system_id":18370,"max_landing_pad_size":"L","distance_to_star":16253,"faction":"",
-		 * 		"government":null,"allegiance":null,"state":null,"type":"Unknown Starport","has_blackmarket":0,"has_commodities":1,
-		 * 		"has_refuel":null,"has_repair":null,"has_rearm":null,"has_outfitting":null,"has_shipyard":null,"import_commodities":[],
-		 * 		"export_commodities":[],"prohibited_commodities":[],"economies":[],"updated_at":1429408824,"listings":[
-		 * 				{"id":1,"station_id":1, "commodity_id":5,"supply":0,"buy_price":0,"sell_price":378,"demand":1137,"collected_at":1429359631,"update_count":"2"}
-		 * 			, {"id":2,"station_id":1,"commodity_id":6,"supply":0,"buy_price":0,"sell_price":6882,"demand":38,"collected_at":1429359631,"update_count":"2"}
-		 * 			,{"id":3,"station_id":1,"commodity_id":7,"supply":0,"buy_price":0,"sell_price":534,"demand":318,"collected_at":1429359631,"update_count":"2"},{"id":4,"station_id":1,"commodity_id":14,"supply":0,"buy_price":0,"sell_price":1451,"demand":139,"collected_at":1429359632,"update_count":"2"},{"id":5,"station_id":1,"commodity_id":15,"supply":0,"buy_price":0,"sell_price":1431,"demand":375,"collected_at":1429359632,"update_count":"2"},{"id":6,"station_id":1,"commodity_id":16,"supply":0,"buy_price":0,"sell_price":472,"demand":528,"collected_at":1429359633,"update_count":"2"},{"id":7,"station_id":1,"commodity_id":17,"supply":0,"buy_price":0,"sell_price":176,"demand":18,"collected_at":1429359633,"update_count":"2"},{"id":8,"station_id":1,"commodity_id":18,"supply":0,"buy_price":0,"sell_price":421,"demand":1626,"collected_at":1429359634,"update_count":"2"},{"id":9,"station_id":1,"commodity_id":19,"supply":0,"buy_price":0,"sell_price":257,"demand":923,"collected_at":1429359634,"update_count":"2"},{"id":10,"station_id":1,"commodity_id":20,"supply":0,"buy_price":0,"sell_price":292,"demand":48,"collected_at":1429359635,"update_count":"2"},{"id":11,"station_id":1,"commodity_id":21,"supply":0,"buy_price":0,"sell_price":1638,"demand":165,"collected_at":1429359635,"update_count":"2"},{"id":12,"station_id":1,"commodity_id":8,"supply":0,"buy_price":0,"sell_price":281,"demand":7114,"collected_at":1429359636,"update_count":"2"},{"id":13,"station_id":1,"commodity_id":9,"supply":0,"buy_price":0,"sell_price":762,"demand":950,"collected_at":1429359636,"update_count":"2"},{"id":14,"station_id":1,"commodity_id":12,"supply":0,"buy_price":0,"sell_price":306,"demand":667,"collected_at":1429359636,"update_count":"2"},{"id":15,"station_id":1,"commodity_id":30,"supply":0,"buy_price":0,"sell_price":534,"demand":127,"collected_at":1429359637,"update_count":"2"},{"id":16,"station_id":1,"commodity_id":31,"supply":0,"buy_price":0,"sell_price":304,"demand":225,"collected_at":1429359637,"update_count":"2"},{"id":17,"station_id":1,"commodity_id":33,"supply":0,"buy_price":0,"sell_price":320,"demand":341,"collected_at":1429359638,"update_count":"2"},{"id":18,"station_id":1,"commodity_id":36,"supply":0,"buy_price":0,"sell_price":6882,"demand":5,"collected_at":1429359638,"update_count":"2"},{"id":19,"station_id":1,"commodity_id":42,"supply":0,"buy_price":0,"sell_price":9281,"demand":1264,"collected_at":1429359639,"update_count":"2"},{"id":20,"station_id":1,"commodity_id":45,"supply":0,"buy_price":0,"sell_price":13678,"demand":2435,"collected_at":1429359639,"update_count":"2"},{"id":21,"station_id":1,"commodity_id":46,"supply":0,"buy_price":0,"sell_price":19943,"demand":3039,"collected_at":1429359640,"update_count":"2"},{"id":22,"station_id":1,"commodity_id":47,"supply":0,"buy_price":0,"sell_price":4765,"demand":2115,"collected_at":1429359640,"update_count":"2"},{"id":23,"station_id":1,"commodity_id":52,"supply":0,"buy_price":2124,"sell_price":2122,"demand":0,"collected_at":1420167769,"update_count":"1"},{"id":24,"station_id":1,"commodity_id":75,"supply":736,"buy_price":20,"sell_price":15,"demand":0,"collected_at":1429359641,"update_count":"2"},{"id":25,"station_id":1,"commodity_id":78,"supply":0,"buy_price":0,"sell_price":1789,"demand":135,"collected_at":1429359641,"update_count":"2"},{"id":26,"station_id":1,"commodity_id":80,"supply":0,"buy_price":0,"sell_price":2149,"demand":88,"collected_at":1429359642,"update_count":"2"},{"id":659902,"station_id":1,"commodity_id":2,"supply":4036,"buy_price":112,"sell_price":107,"demand":0,"collected_at":1429359630,"update_count":"1"},{"id":659903,"station_id":1,"commodity_id":83,"supply":0,"buy_price":0,"sell_price":36459,"demand":1217,"collected_at":1429359641,"update_count":"1"}
-		 * 			]
-		 * 	}
-		 *
-		 */
-		return new XmlNode("Nutting");
-	}
-
+	 * 		"id":1,"name":"Bain Colony","system_id":18370,"max_landing_pad_size":"L","distance_to_star":16253,"faction":"",
+	 * 		"government":null,"allegiance":null,"state":null,"type":"Unknown Starport","has_blackmarket":0,"has_commodities":1,
+	 * 		"has_refuel":null,"has_repair":null,"has_rearm":null,"has_outfitting":null,"has_shipyard":null,"import_commodities":[],
+	 * 		"export_commodities":[],"prohibited_commodities":[],"economies":[],"updated_at":1429408824,"listings":[
+	 * 				{"id":1,"station_id":1, "commodity_id":5,"supply":0,"buy_price":0,"sell_price":378,"demand":1137,"collected_at":1429359631,"update_count":"2"}
+	 * 			, {"id":2,"station_id":1,"commodity_id":6,"supply":0,"buy_price":0,"sell_price":6882,"demand":38,"collected_at":1429359631,"update_count":"2"}
+	 * 			,{"id":3,"station_id":1,"commodity_id":7,"supply":0,"buy_price":0,"sell_price":534,"demand":318,"collected_at":1429359631,"update_count":"2"},{"id":4,"station_id":1,"commodity_id":14,"supply":0,"buy_price":0,"sell_price":1451,"demand":139,"collected_at":1429359632,"update_count":"2"},{"id":5,"station_id":1,"commodity_id":15,"supply":0,"buy_price":0,"sell_price":1431,"demand":375,"collected_at":1429359632,"update_count":"2"},{"id":6,"station_id":1,"commodity_id":16,"supply":0,"buy_price":0,"sell_price":472,"demand":528,"collected_at":1429359633,"update_count":"2"},{"id":7,"station_id":1,"commodity_id":17,"supply":0,"buy_price":0,"sell_price":176,"demand":18,"collected_at":1429359633,"update_count":"2"},{"id":8,"station_id":1,"commodity_id":18,"supply":0,"buy_price":0,"sell_price":421,"demand":1626,"collected_at":1429359634,"update_count":"2"},{"id":9,"station_id":1,"commodity_id":19,"supply":0,"buy_price":0,"sell_price":257,"demand":923,"collected_at":1429359634,"update_count":"2"},{"id":10,"station_id":1,"commodity_id":20,"supply":0,"buy_price":0,"sell_price":292,"demand":48,"collected_at":1429359635,"update_count":"2"},{"id":11,"station_id":1,"commodity_id":21,"supply":0,"buy_price":0,"sell_price":1638,"demand":165,"collected_at":1429359635,"update_count":"2"},{"id":12,"station_id":1,"commodity_id":8,"supply":0,"buy_price":0,"sell_price":281,"demand":7114,"collected_at":1429359636,"update_count":"2"},{"id":13,"station_id":1,"commodity_id":9,"supply":0,"buy_price":0,"sell_price":762,"demand":950,"collected_at":1429359636,"update_count":"2"},{"id":14,"station_id":1,"commodity_id":12,"supply":0,"buy_price":0,"sell_price":306,"demand":667,"collected_at":1429359636,"update_count":"2"},{"id":15,"station_id":1,"commodity_id":30,"supply":0,"buy_price":0,"sell_price":534,"demand":127,"collected_at":1429359637,"update_count":"2"},{"id":16,"station_id":1,"commodity_id":31,"supply":0,"buy_price":0,"sell_price":304,"demand":225,"collected_at":1429359637,"update_count":"2"},{"id":17,"station_id":1,"commodity_id":33,"supply":0,"buy_price":0,"sell_price":320,"demand":341,"collected_at":1429359638,"update_count":"2"},{"id":18,"station_id":1,"commodity_id":36,"supply":0,"buy_price":0,"sell_price":6882,"demand":5,"collected_at":1429359638,"update_count":"2"},{"id":19,"station_id":1,"commodity_id":42,"supply":0,"buy_price":0,"sell_price":9281,"demand":1264,"collected_at":1429359639,"update_count":"2"},{"id":20,"station_id":1,"commodity_id":45,"supply":0,"buy_price":0,"sell_price":13678,"demand":2435,"collected_at":1429359639,"update_count":"2"},{"id":21,"station_id":1,"commodity_id":46,"supply":0,"buy_price":0,"sell_price":19943,"demand":3039,"collected_at":1429359640,"update_count":"2"},{"id":22,"station_id":1,"commodity_id":47,"supply":0,"buy_price":0,"sell_price":4765,"demand":2115,"collected_at":1429359640,"update_count":"2"},{"id":23,"station_id":1,"commodity_id":52,"supply":0,"buy_price":2124,"sell_price":2122,"demand":0,"collected_at":1420167769,"update_count":"1"},{"id":24,"station_id":1,"commodity_id":75,"supply":736,"buy_price":20,"sell_price":15,"demand":0,"collected_at":1429359641,"update_count":"2"},{"id":25,"station_id":1,"commodity_id":78,"supply":0,"buy_price":0,"sell_price":1789,"demand":135,"collected_at":1429359641,"update_count":"2"},{"id":26,"station_id":1,"commodity_id":80,"supply":0,"buy_price":0,"sell_price":2149,"demand":88,"collected_at":1429359642,"update_count":"2"},{"id":659902,"station_id":1,"commodity_id":2,"supply":4036,"buy_price":112,"sell_price":107,"demand":0,"collected_at":1429359630,"update_count":"1"},{"id":659903,"station_id":1,"commodity_id":83,"supply":0,"buy_price":0,"sell_price":36459,"demand":1217,"collected_at":1429359641,"update_count":"1"}
+	 * 			]
+	 * 	}
+	 *
+	 * /
+	return new XmlNode("Nutting");
+}
+	/**
+	 * Fnu
+	 */
 	public XmlNode getNodeData() {
 		return rawNode;
 	}

@@ -91,7 +91,20 @@ public class parseJsonWithAPI {
 					Object item = iter.next();
 					if(item instanceof JSONObject) {
 						JSONObject jItem = (JSONObject) item;
-						System.out.println(jItem.toJSONString());
+						//						System.out.println(jItem.toJSONString());
+						Long tmp = (Long) jItem.getOrDefault("needs_permit", 0);
+						Boolean permit = false;
+						if((tmp == null) || (tmp == 0)) {
+							permit = false;
+						} else {
+							permit = true;
+						}
+						String name = jItem.getOrDefault("name", "Nameless system").toString();
+						if(permit == null) {
+							System.out.println("Permit logic gives: "+ permit +" for system '"+ name +"'.");
+						} else if (permit != false) {
+							System.out.println("Permit logic gives: "+ permit +" for system '"+ name +"'.");
+						}
 					}
 				}
 				System.out.println("Size: "+ jCommodities.size());
