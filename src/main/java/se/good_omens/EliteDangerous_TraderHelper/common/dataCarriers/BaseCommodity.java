@@ -1,5 +1,6 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers;
 
+
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_CATEGORY;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_DATA;
 import se.good_omens.EliteDangerous_TraderHelper.common.interfaces.Commodity;

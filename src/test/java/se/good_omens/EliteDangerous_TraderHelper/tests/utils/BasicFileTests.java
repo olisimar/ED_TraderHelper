@@ -13,12 +13,12 @@ public class BasicFileTests {
 	public static String filePath = "C:/OWN/LunaWorkspace/ED_TraderHelper/rawData/";
 
 
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void test_fileReadCategories() {
 		JSONParserToXml parser = new JSONParserToXml(filePath +"commodities.json", PARSE_TYPE.CATEGORIES);
 		System.out.println(parser.getNodeData().xmlPrint());
 	}
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void test_fileReadCommodities() {
 		JSONParserToXml parser = new JSONParserToXml(filePath +"commodities.json", PARSE_TYPE.COMMIDITIES);
 		System.out.println(parser.getNodeData().xmlPrint());
