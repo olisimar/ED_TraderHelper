@@ -121,8 +121,8 @@ public class BaseCommodity implements Commodity {
 		this.rare = rare;
 	}
 
-	public boolean getRare() {
-		return this.rare;
+	public Boolean isRare() {
+		return rare;
 	}
 
 	public XmlNode generateXmlRepresentation() {
