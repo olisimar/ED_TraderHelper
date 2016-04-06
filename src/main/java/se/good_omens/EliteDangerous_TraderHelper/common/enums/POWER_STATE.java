@@ -7,7 +7,7 @@ public enum POWER_STATE {
 
 	public POWER_STATE fromString(String in) {
 		if((in == null) || in.trim().isEmpty()) {
-			throw new RuntimeException("Null or Empty String found when trying to detemine POWER_STATE");
+			return POWER_STATE.NONE;
 		}
 		for(POWER_STATE state : POWER_STATE.values()) {
 			if(state.name().equalsIgnoreCase(in.trim())) {

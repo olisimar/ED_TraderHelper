@@ -10,7 +10,7 @@ public enum ECONOMY_TYPE {
 
 	public ECONOMY_TYPE fromString(String in) {
 		if((in == null) || in.trim().isEmpty()) {
-			return ECONOMY_TYPE.UNKNOWN;
+			return ECONOMY_TYPE.NONE;
 		}
 		for(ECONOMY_TYPE type : ECONOMY_TYPE.values()) {
 			if(type.name().equalsIgnoreCase(in)) {

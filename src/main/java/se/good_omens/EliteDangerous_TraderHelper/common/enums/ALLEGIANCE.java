@@ -1,16 +1,18 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.enums;
 
 public enum ALLEGIANCE {
-	NONE
+	UNKNOWN
+	, INDEPENDENT
 	, FEDERATION
 	, EMPIRE
 	, ALLIANCE
+	, NONE
 	;
 
 
 	public ALLEGIANCE fromString(String in) {
 		if( (in == null) || in.trim().isEmpty()) {
-			return ALLEGIANCE.NONE;
+			return ALLEGIANCE.UNKNOWN;
 		}
 		for(ALLEGIANCE allegiance : ALLEGIANCE.values()) {
 			if(allegiance.name().equalsIgnoreCase(in)) {
