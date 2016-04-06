@@ -10,7 +10,7 @@ public enum ALLEGIANCE {
 	;
 
 
-	public ALLEGIANCE fromString(String in) {
+	public static ALLEGIANCE fromString(String in) {
 		if( (in == null) || in.trim().isEmpty()) {
 			return ALLEGIANCE.UNKNOWN;
 		}

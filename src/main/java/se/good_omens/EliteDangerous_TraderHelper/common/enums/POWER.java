@@ -14,20 +14,20 @@ public enum POWER {
 	, AISLING_DUVAL("Aisling Duval", ALLEGIANCE.EMPIRE)
 	;
 
-	private final String name;
+	private final String powerName;
 	private final ALLEGIANCE allegiance;
 
 	private POWER(String name, ALLEGIANCE allegiance) {
-		this.name = name;
+		this.powerName = name;
 		this.allegiance = allegiance;
 	}
 
-	public POWER fromString(String in) {
+	public static POWER fromString(String in) {
 		if((in == null) || in.trim().isEmpty()) {
 			return POWER.NONE;
 		}
 		for(POWER item : POWER.values()) {
-			if(item.name.equalsIgnoreCase(in.trim())) {
+			if(item.getPublicName().equalsIgnoreCase(in.trim())) {
 				return item;
 			}
 		}
@@ -35,7 +35,7 @@ public enum POWER {
 	}
 
 	public String getPublicName() {
-		return this.name;
+		return this.powerName;
 	}
 
 	public ALLEGIANCE getAllegiance() {

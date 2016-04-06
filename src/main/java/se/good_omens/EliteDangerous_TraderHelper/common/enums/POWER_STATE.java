@@ -3,9 +3,13 @@ package se.good_omens.EliteDangerous_TraderHelper.common.enums;
 public enum POWER_STATE {
 	NONE
 	, UNKNOWN
+	, CONTROL
+	, CONTESTED
+	, EXPLOITED
+	, EXPANSION
 	;
 
-	public POWER_STATE fromString(String in) {
+	public static POWER_STATE fromString(String in) {
 		if((in == null) || in.trim().isEmpty()) {
 			return POWER_STATE.NONE;
 		}

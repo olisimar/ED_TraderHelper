@@ -11,6 +11,12 @@ import org.json.simple.parser.ParseException;
 
 import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.Position;
 import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.StarSystem;
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.ALLEGIANCE;
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.ECONOMY_TYPE;
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.GOVERMENT_TYPE;
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.POWER;
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.POWER_STATE;
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.SECURITY_RATING;
 
 public class ParseSystemJSON {
 
@@ -18,6 +24,7 @@ public class ParseSystemJSON {
 	private TreeMap<Integer, StarSystem>	systems			= new TreeMap<Integer, StarSystem>();
 
 	private static HashSet<String>				power				= new HashSet<String>();
+	private static HashSet<String>				state				= new HashSet<String>();
 	private static HashSet<String>				powerState	= new HashSet<String>();
 	private static HashSet<String>				allegiance	= new HashSet<String>();
 	private static HashSet<String>				economyType	= new HashSet<String>();
@@ -46,50 +53,9 @@ public class ParseSystemJSON {
 			e.printStackTrace();
 		}
 
-		System.out.println("POWERS:");
-		for (String item : power) {
-			System.out.println(", " + item.toUpperCase().replaceAll(" ", "_") + "(\"" + item + ", ALLEGIANCE.");
-		}
-
-		System.out.println("\nPOWER_STATE:");
-		for (String item : powerState) {
-			if (item == null) {
-				System.out.println("NULL");
-			} else {
-				System.out.println(", " + item.toUpperCase());
-			}
-		}
-		System.out.println("\nALLEGIANCE:");
-		for (String item : allegiance) {
-			if (item == null) {
-				System.out.println("NULL");
-			} else {
-				System.out.println(", " + item.toUpperCase());
-			}
-		}
-		System.out.println("\nECONOMY_TYPE:");
-		for (String item : economyType) {
-			if (item == null) {
-				System.out.println("NULL");
-			} else {
-				System.out.println(", " + item.toUpperCase());
-			}
-		}
-		System.out.println("\nGOVERNMENT:");
-		for (String item : government) {
-			if (item == null) {
-				System.out.println("NULL");
-			} else {
-				System.out.println(", " + item.toUpperCase());
-			}
-		}
-		System.out.println("\nSECURITY:");
-		for (String item : powerState) {
-			if (item == null) {
-				System.out.println("NULL");
-			} else {
-				System.out.println(", " + item.toUpperCase());
-			}
+		System.out.println("STATES:");
+		for (String item : state) {
+			System.out.println(" ,"+ item);
 		}
 	}
 
@@ -105,12 +71,13 @@ public class ParseSystemJSON {
 			Double z = new Double(obj.get("z").toString());
 
 			current.setPosition(new Position(x, y, z));
-			power.add((String) obj.get("power"));
-			powerState.add((String) obj.get("power_state"));
-			allegiance.add((String) obj.get("allegiance"));
-			economyType.add((String) obj.get("primary_economy"));
-			secRating.add((String) obj.get("security"));
-			government.add((String) obj.get("government"));
+			current.setPower(POWER.fromString((String)obj.get("power")));
+			current.setPowerState(POWER_STATE.fromString((String) obj.get("power_state")));
+			current.setAllegiance(ALLEGIANCE.fromString((String) obj.get("allegiance")));
+			current.setPrimaryEconomy(ECONOMY_TYPE.fromString((String) obj.get("primary_economy")));
+			current.setSecRating(SECURITY_RATING.fromString((String) obj.get("security")));
+			current.setGovernment(GOVERMENT_TYPE.fromString((String) obj.get("government")));
+			state.add((String) obj.get("state"));
 			return current;
 		}
 		return null;

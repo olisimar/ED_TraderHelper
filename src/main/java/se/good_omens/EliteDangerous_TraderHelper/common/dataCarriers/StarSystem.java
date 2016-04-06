@@ -4,6 +4,7 @@ import java.util.Date;
 
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.ALLEGIANCE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.ECONOMY_TYPE;
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.GOVERMENT_TYPE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.POWER;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.POWER_STATE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.SECURITY_RATING;
@@ -15,7 +16,7 @@ public class StarSystem {
 	private Position position;
 	private String faction = null;
 	private int population = 0;
-	private String government = "none";
+	private GOVERMENT_TYPE government = GOVERMENT_TYPE.NONE;
 	private ALLEGIANCE allegiance;
 	private String state = "None";
 	private SECURITY_RATING secRating = SECURITY_RATING.UNKNOWN;
@@ -53,11 +54,11 @@ public class StarSystem {
 		this.population = population;
 	}
 
-	public String getGovernment() {
+	public GOVERMENT_TYPE getGovernment() {
 		return government;
 	}
 
-	public void setGovernment(String government) {
+	public void setGovernment(GOVERMENT_TYPE government) {
 		this.government = government;
 	}
 

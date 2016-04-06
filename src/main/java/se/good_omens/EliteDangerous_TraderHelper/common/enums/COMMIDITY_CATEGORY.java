@@ -17,4 +17,5 @@ public enum COMMIDITY_CATEGORY {
 	, METALS
 	, MINERALS
 
+
 }
