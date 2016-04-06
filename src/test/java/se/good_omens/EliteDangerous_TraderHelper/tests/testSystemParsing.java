@@ -1,4 +1,4 @@
-package se.good_omens.EliteDangerous_TraderHelper.tests.utils;
+package se.good_omens.EliteDangerous_TraderHelper.tests;
 
 import java.io.File;
 import java.io.FileNotFoundException;

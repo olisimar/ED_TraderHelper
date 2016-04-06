@@ -1,6 +1,6 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.utils;
 
-import java.util.HashSet;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.TreeMap;
 
@@ -17,19 +17,13 @@ import se.good_omens.EliteDangerous_TraderHelper.common.enums.GOVERMENT_TYPE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.POWER;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.POWER_STATE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.SECURITY_RATING;
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.SYSTEM_STATE;
 
 public class ParseSystemJSON {
 
 	private final String									originalData;
-	private TreeMap<Integer, StarSystem>	systems			= new TreeMap<Integer, StarSystem>();
+	private TreeMap<Long, StarSystem>	systems			= new TreeMap<Long, StarSystem>();
 
-	private static HashSet<String>				power				= new HashSet<String>();
-	private static HashSet<String>				state				= new HashSet<String>();
-	private static HashSet<String>				powerState	= new HashSet<String>();
-	private static HashSet<String>				allegiance	= new HashSet<String>();
-	private static HashSet<String>				economyType	= new HashSet<String>();
-	private static HashSet<String>				secRating		= new HashSet<String>();
-	private static HashSet<String>				government	= new HashSet<String>();
 
 	public ParseSystemJSON(String data) {
 		this.originalData = data;
@@ -46,17 +40,14 @@ public class ParseSystemJSON {
 				Iterator iter = ((JSONArray) data).iterator();
 				while (iter.hasNext()) {
 					StarSystem current = parseSingleSystem(iter.next());
+					systems.put(current.getId(), current);
 				}
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		System.out.println("STATES:");
-		for (String item : state) {
-			System.out.println(" ,"+ item);
-		}
+		System.out.println("Parsed "+ systems.size() +" systems, ready to proceed...");
 	}
 
 	private StarSystem parseSingleSystem(Object next) {
@@ -71,13 +62,22 @@ public class ParseSystemJSON {
 			Double z = new Double(obj.get("z").toString());
 
 			current.setPosition(new Position(x, y, z));
+			current.setFaction((String) obj.get("faction"));
 			current.setPower(POWER.fromString((String)obj.get("power")));
 			current.setPowerState(POWER_STATE.fromString((String) obj.get("power_state")));
 			current.setAllegiance(ALLEGIANCE.fromString((String) obj.get("allegiance")));
 			current.setPrimaryEconomy(ECONOMY_TYPE.fromString((String) obj.get("primary_economy")));
 			current.setSecRating(SECURITY_RATING.fromString((String) obj.get("security")));
 			current.setGovernment(GOVERMENT_TYPE.fromString((String) obj.get("government")));
-			state.add((String) obj.get("state"));
+			current.setState(SYSTEM_STATE.fromString((String) obj.get("state")));
+			if(obj.get("population") != null) {
+				current.setPopulation((Long)obj.get("population"));
+			}
+			current.setUpdatedAt(new Date((Long)obj.get("updated_at")));
+			if((obj.get("needs_permit") != null) && ((Long)obj.get("needs_permit") != 0)) {
+				current.setNeedsPermit(true);
+			}
+			current.setSimbadRef((String)obj.get("simbad_ref"));
 			return current;
 		}
 		return null;

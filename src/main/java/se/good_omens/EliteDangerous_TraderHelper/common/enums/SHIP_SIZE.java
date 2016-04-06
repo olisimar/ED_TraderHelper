@@ -2,10 +2,11 @@ package se.good_omens.EliteDangerous_TraderHelper.common.enums;
 
 public enum SHIP_SIZE {
 
-	S("Small")
+	NONE("NONE")
+	, UNKNOWN("Unknown")
+	, S("Small")
 	,	M("Medium")
 	,	L("Large")
-	, UNKNOWN("Unknown")
 	;
 
 
@@ -19,12 +20,15 @@ public enum SHIP_SIZE {
 		return this.representation;
 	}
 
-	public SHIP_SIZE fromString(String in) {
+	public static SHIP_SIZE fromString(String in) {
+		if((in == null) || in.trim().isEmpty()) {
+			return SHIP_SIZE.NONE;
+		}
 		for(SHIP_SIZE size : SHIP_SIZE.values()) {
 			if(in.equalsIgnoreCase(size.getRepresenation()) || in.equalsIgnoreCase(size.name())) {
 				return size;
 			}
 		}
-		return UNKNOWN;
+		return SHIP_SIZE.UNKNOWN;
 	}
 }

@@ -8,6 +8,7 @@ import se.good_omens.EliteDangerous_TraderHelper.common.enums.GOVERMENT_TYPE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.POWER;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.POWER_STATE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.SECURITY_RATING;
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.SYSTEM_STATE;
 
 public class StarSystem {
 
@@ -15,11 +16,11 @@ public class StarSystem {
 	private final String name;
 	private Position position;
 	private String faction = null;
-	private int population = 0;
+	private long population = 0L;
 	private GOVERMENT_TYPE government = GOVERMENT_TYPE.NONE;
 	private ALLEGIANCE allegiance;
-	private String state = "None";
-	private SECURITY_RATING secRating = SECURITY_RATING.UNKNOWN;
+	private SYSTEM_STATE state = SYSTEM_STATE.NONE;
+	private SECURITY_RATING secRating = SECURITY_RATING.NONE;
 	private ECONOMY_TYPE primaryEconomy = ECONOMY_TYPE.NONE;
 	private POWER power = POWER.NONE;
 	private POWER_STATE powerState = POWER_STATE.NONE;
@@ -46,11 +47,11 @@ public class StarSystem {
 		this.faction = faction;
 	}
 
-	public int getPopulation() {
+	public long getPopulation() {
 		return population;
 	}
 
-	public void setPopulation(int population) {
+	public void setPopulation(long population) {
 		this.population = population;
 	}
 
@@ -70,12 +71,12 @@ public class StarSystem {
 		this.allegiance = allegiance;
 	}
 
-	public String getState() {
+	public SYSTEM_STATE getState() {
 		return state;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setState(SYSTEM_STATE system_STATE) {
+		this.state = system_STATE;
 	}
 
 	public SECURITY_RATING getSecRating() {
