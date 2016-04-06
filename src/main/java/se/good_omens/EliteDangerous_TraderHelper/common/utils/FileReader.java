@@ -12,6 +12,7 @@ public class FileReader {
 	public static String readFile(String file) throws IOException, URISyntaxException {
 		return FileReader.readFile(new URI(file));
 	}
+
 	public static String readFile(URI file) throws IOException {
 		return new String(Files.readAllBytes(Paths.get( file )));
 	}

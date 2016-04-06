@@ -18,9 +18,11 @@ public class BasicFileTests {
 		JSONParserToXml parser = new JSONParserToXml(filePath +"commodities.json", PARSE_TYPE.CATEGORIES);
 		System.out.println(parser.getNodeData().xmlPrint());
 	}
+
 	@Test(enabled = true)
 	public void test_fileReadCommodities() {
 		JSONParserToXml parser = new JSONParserToXml(filePath +"commodities.json", PARSE_TYPE.COMMIDITIES);
+		XmlNode result = parser.getNodeData();
 		System.out.println(parser.getNodeData().xmlPrint());
 
 		if(false) {

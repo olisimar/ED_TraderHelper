@@ -1,6 +1,7 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.utils;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -8,6 +9,7 @@ import java.util.TreeMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_CATEGORY;
 import se.good_omens.xmlModel.XmlNode;
@@ -95,8 +97,21 @@ public class JSONParserToXml {
 	}
 
 	private XmlNode parseCommiditiesBaseData(JSONParser jsonParser) {
+		XmlNode commodites = new XmlNode("commodities");
+		try {
+			Object wares = jsonParser.parse(this.reader);
+			if(wares instanceof JSONArray) {
 
-		return null;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return commodites;
 	}
 
 	private XmlNode parseSystemFile(JSONParser jsonParser) {
