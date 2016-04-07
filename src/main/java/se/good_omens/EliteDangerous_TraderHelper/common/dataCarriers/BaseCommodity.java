@@ -1,6 +1,5 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers;
 
-
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_CATEGORY;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_DATA;
 import se.good_omens.EliteDangerous_TraderHelper.common.interfaces.Commodity;
@@ -15,16 +14,16 @@ import se.good_omens.xmlModel.XmlNode;
  */
 public class BaseCommodity implements Commodity {
 
-	private int									id;
+	private long								id;
 	private COMMODITY_DATA			commodity;
 	private COMMODITY_CATEGORY	category;
 	private String							name;
-	private int									averagePrice;
+	private long								averagePrice;
 	private Boolean							sold					= false;
 	private Boolean							bought				= true;
 	private Boolean							illegal				= false;
-	private int									sellingPrice	= 0;
-	private int									buyingPrice		= 0;
+	private long								sellingPrice	= 0L;
+	private long								buyingPrice		= 0L;
 	private Boolean							rare					= false;
 
 	public BaseCommodity(int id) {
@@ -43,7 +42,7 @@ public class BaseCommodity implements Commodity {
 		this.id = id;
 	}
 
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
@@ -55,7 +54,6 @@ public class BaseCommodity implements Commodity {
 		return this.commodity;
 	}
 
-
 	public COMMODITY_CATEGORY getCategory() {
 		return category;
 	}
@@ -63,7 +61,6 @@ public class BaseCommodity implements Commodity {
 	public void setCategory(COMMODITY_CATEGORY category) {
 		this.category = category;
 	}
-
 
 	public void setName(String name) {
 		this.name = name;
@@ -97,7 +94,7 @@ public class BaseCommodity implements Commodity {
 		return this.illegal;
 	}
 
-	public int getAveragePrice() {
+	public long getAveragePrice() {
 		return this.averagePrice;
 	}
 
@@ -105,7 +102,7 @@ public class BaseCommodity implements Commodity {
 		this.sellingPrice = sellingPrice;
 	}
 
-	public int getSellingPrice() {
+	public long getSellingPrice() {
 		return this.sellingPrice;
 	}
 
@@ -113,7 +110,7 @@ public class BaseCommodity implements Commodity {
 		this.buyingPrice = buyingPrice;
 	}
 
-	public int getBuyingPrice() {
+	public long getBuyingPrice() {
 		return this.buyingPrice;
 	}
 
@@ -129,11 +126,15 @@ public class BaseCommodity implements Commodity {
 		XmlNode toReturn = new XmlNode("commodity");
 
 		toReturn.addAttribute("id", new Integer(this.getCommodity().getId()).toString());
-		toReturn.addChildNode(new XmlNode("category").addAttribute("id", new Integer(this.getCategory().getIndex()).toString()).setTextValue(this.getCategory().getName()));
+		toReturn
+		.addChildNode(new XmlNode("category").addAttribute("id", new Integer(this.getCategory().getIndex()).toString())
+				.setTextValue(this.getCategory().getName()));
 		toReturn.addChildNode(new XmlNode("name").setTextValue(this.getName()));
-		toReturn.addChildNode(new XmlNode("averagePrice").setTextValue(new Integer(this.getAveragePrice()).toString()));
-		toReturn.addChildNode(new XmlNode("sellingPrice").addAttribute("sold", this.isSold().toString()).setTextValue(new Integer(this.getSellingPrice()).toString()));
-		toReturn.addChildNode(new XmlNode("buyingPrice").addAttribute("bought", this.isSold().toString()).setTextValue(new Integer(this.getBuyingPrice()).toString()));
+		toReturn.addChildNode(new XmlNode("averagePrice").setTextValue(new Long(this.getAveragePrice()).toString()));
+		toReturn.addChildNode(new XmlNode("sellingPrice").addAttribute("sold", this.isSold().toString())
+				.setTextValue(new Long(this.getSellingPrice()).toString()));
+		toReturn.addChildNode(new XmlNode("buyingPrice").addAttribute("bought", this.isSold().toString())
+				.setTextValue(new Long(this.getBuyingPrice()).toString()));
 		toReturn.addAttribute("illegal", this.isIllegal().toString());
 		toReturn.addAttribute("rare", rare.toString());
 
@@ -155,7 +156,8 @@ public class BaseCommodity implements Commodity {
 		BaseCommodity toReturn = new BaseCommodity(new Integer(node.getAttributeValue("id")).intValue());
 		if (toReturn.getCommodity() != COMMODITY_DATA.NOT_DEFINED) {
 			if (!node.getChildByName("name").getTextValue().equalsIgnoreCase(toReturn.getName())) {
-				throw new IllegalArgumentException("Node did not match in name. Got '"+ node.getChildByName("name").getTextValue() + "', expected '"+ toReturn.getName() + "'.");
+				throw new IllegalArgumentException("Node did not match in name. Got '"
+						+ node.getChildByName("name").getTextValue() + "', expected '" + toReturn.getName() + "'.");
 			}
 		}
 		toReturn.setBought(new Boolean(node.getChildByName("buyingPrice").getAttributeValue("bought")));

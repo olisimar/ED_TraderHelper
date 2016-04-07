@@ -18,10 +18,10 @@ public class ParseStationJSON {
 
 	private HashSet<String> station_state = new HashSet<String>();
 	private HashSet<String> commodities = new HashSet<String>();
-	private HashSet<String>
+	private HashSet<String> categories = new HashSet<String>();
 
-	public ParseStationJSON(String json) {
-		this.orginalData = json;
+	public ParseStationJSON(String data) {
+		this.orginalData = data;
 	}
 
 	public void parseStationJSON() {
@@ -44,7 +44,6 @@ public class ParseStationJSON {
 	}
 
 	private Station parseSingleStationJSON(Object next) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

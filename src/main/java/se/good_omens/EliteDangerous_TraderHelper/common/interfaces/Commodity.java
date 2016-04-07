@@ -11,13 +11,14 @@ import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_DATA;
 public interface Commodity extends XmlEntity {
 
 	public COMMODITY_DATA getCommodity();
+	public long getId();
 	public String getName();
 	public Boolean isSold();
 	public Boolean isBought();
 	public Boolean isIllegal();
 	public Boolean isRare();
 
-	public int getAveragePrice();
-	public int getSellingPrice();
-	public int getBuyingPrice();
+	public long getAveragePrice();
+	public long getSellingPrice();
+	public long getBuyingPrice();
 }

@@ -40,10 +40,6 @@ public class Station {
 
 	private Set<ECONOMY_TYPE> economies = new HashSet<ECONOMY_TYPE>();
 	private Date stationUpdatedAt = new Date(0L);
-	private Date shipyardUpdateAt = null;
-	private Date outFittingUpdatedAt = null;
-
-	private Set<String> sellingShips = new HashSet<String>();
 	private Set<String> sellingModules = new HashSet<String>();
 
 	public String getBaseName() {
@@ -228,30 +224,6 @@ public class Station {
 
 	public void setStationUpdatedAt(Date stationUpdatedAt) {
 		this.stationUpdatedAt = stationUpdatedAt;
-	}
-
-	public Date getShipyardUpdateAt() {
-		return shipyardUpdateAt;
-	}
-
-	public void setShipyardUpdateAt(Date shipyardUpdateAt) {
-		this.shipyardUpdateAt = shipyardUpdateAt;
-	}
-
-	public Date getOutFittingUpdatedAt() {
-		return outFittingUpdatedAt;
-	}
-
-	public void setOutFittingUpdatedAt(Date outFittingUpdatedAt) {
-		this.outFittingUpdatedAt = outFittingUpdatedAt;
-	}
-
-	public Set<String> getSellingShips() {
-		return sellingShips;
-	}
-
-	public void setSellingShips(Set<String> sellingShips) {
-		this.sellingShips = sellingShips;
 	}
 
 	public Set<String> getSellingModules() {
