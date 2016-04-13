@@ -17,8 +17,6 @@ public class ParseStationJSON {
 	private final TreeMap<Long, Station> stations = new TreeMap<Long, Station>();
 
 	private HashSet<String> station_state = new HashSet<String>();
-	private HashSet<String> commodities = new HashSet<String>();
-	private HashSet<String> categories = new HashSet<String>();
 
 	public ParseStationJSON(String data) {
 		this.orginalData = data;
@@ -38,12 +36,11 @@ public class ParseStationJSON {
 				}
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	private Station parseSingleStationJSON(Object next) {
-		return null;
+
 	}
 }
