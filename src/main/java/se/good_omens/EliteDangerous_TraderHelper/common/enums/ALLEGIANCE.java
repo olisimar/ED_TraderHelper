@@ -19,6 +19,7 @@ public enum ALLEGIANCE {
 				return allegiance;
 			}
 		}
+		System.out.println(in);
 		return ALLIANCE.NONE;
 	}
 }

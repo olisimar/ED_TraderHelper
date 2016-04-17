@@ -40,14 +40,15 @@ public class ParseSystemJSON {
 				Iterator iter = ((JSONArray) data).iterator();
 				while (iter.hasNext()) {
 					StarSystem current = parseSingleSystem(iter.next());
-					systems.put(current.getId(), current);
+					if(current != null) {
+						systems.put(current.getId(), current);
+					}
 				}
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Parsed "+ systems.size() +" systems, ready to proceed...");
 	}
 
 	private StarSystem parseSingleSystem(Object next) {

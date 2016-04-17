@@ -239,7 +239,17 @@ public class Station {
 	}
 
 	public long getId() {
-		// TODO Auto-generated method stub
 		return id;
+	}
+
+	public void addEconomy(ECONOMY_TYPE type) {
+		if(this.economies == null) {
+			this.economies = new HashSet<ECONOMY_TYPE>();
+		}
+		this.economies.add(type);
+	}
+
+	public boolean hasEconomy(ECONOMY_TYPE type) {
+		return this.economies.contains(type);
 	}
 }
