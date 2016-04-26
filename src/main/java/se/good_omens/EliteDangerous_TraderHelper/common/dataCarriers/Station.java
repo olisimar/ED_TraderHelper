@@ -252,4 +252,18 @@ public class Station {
 	public boolean hasEconomy(ECONOMY_TYPE type) {
 		return this.economies.contains(type);
 	}
+
+	public void addImportCommodity(BaseCommodity commodity) {
+		if(this.importCommodities == null) {
+			this.importCommodities = new HashSet<Commodity>();
+		}
+		this.importCommodities.add(commodity);
+	}
+
+	public void addExportCommodity(BaseCommodity commodity) {
+		if(this.exportCommodities == null) {
+			this.exportCommodities = new HashSet<Commodity>();
+		}
+		this.exportCommodities.add(commodity);
+	}
 }

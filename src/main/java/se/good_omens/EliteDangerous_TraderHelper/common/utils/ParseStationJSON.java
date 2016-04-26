@@ -1,7 +1,5 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.utils;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeMap;
 
@@ -19,9 +17,6 @@ public class ParseStationJSON {
 
 	private final String											orginalData;
 	private final TreeMap<Long, Station>			stations			= new TreeMap<Long, Station>();
-
-	private HashSet<String>										station_state	= new HashSet<String>();
-	private HashMap<Long, HashSet<String>>	types					= new HashMap<Long, HashSet<String>>();
 
 	public ParseStationJSON(String data) {
 		this.orginalData = data;
@@ -103,18 +98,13 @@ public class ParseStationJSON {
 					current.setDistanceToStar(new Long(data.get("distance_to_star").toString()).longValue());
 				}
 
-				// Stats here
-				if (data.get("type") != null) {
-					HashSet<String> list = types.get(current.getTypeId());
-					if (list == null) {
-						list = new HashSet<String>();
-					}
-					list.add(data.get("type").toString());
-					types.put(current.getTypeId(), list);
-				}
 				return current;
 			}
 		}
 		throw new IllegalArgumentException("Not an expected JSONObject, got a: " + next.getClass().getSimpleName());
+	}
+
+	public TreeMap<Long, Station> getStations() {
+		return this.stations;
 	}
 }
