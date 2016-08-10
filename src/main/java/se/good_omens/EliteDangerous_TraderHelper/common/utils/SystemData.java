@@ -1,4 +1,4 @@
-package se.good_omens.EliteDangerous_TraderHelper.common;
+package se.good_omens.EliteDangerous_TraderHelper.common.utils;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
