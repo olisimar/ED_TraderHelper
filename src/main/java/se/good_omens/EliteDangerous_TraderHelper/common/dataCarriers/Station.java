@@ -13,34 +13,34 @@ import se.good_omens.EliteDangerous_TraderHelper.common.interfaces.Commodity;
 
 public class Station {
 
-	private long id;
-	private String baseName;
-	private long systemId;
-	private SHIP_SIZE maxLandingPadSize = SHIP_SIZE.M;
-	private long distanceToStar = -1L;
-	private String localFaction = "";
-	private GOVERMENT_TYPE goverment = GOVERMENT_TYPE.NONE;
-	private ALLEGIANCE allegiance = ALLEGIANCE.NONE;
-	private STATION_STATE state = STATION_STATE.NONE;
-	private long typeId = 0;
-	private SHIP_SIZE maxSize;
+	private long							id;
+	private String						baseName;
+	private long							systemId;
+	private SHIP_SIZE					maxLandingPadSize			= SHIP_SIZE.M;
+	private long							distanceToStar				= -1L;
+	private String						localFaction					= "";
+	private GOVERMENT_TYPE		goverment							= GOVERMENT_TYPE.NONE;
+	private ALLEGIANCE				allegiance						= ALLEGIANCE.NONE;
+	private STATION_STATE			state									= STATION_STATE.NONE;
+	private long							typeId								= 0;
+	private SHIP_SIZE					maxSize;
 
-	private boolean isPlanetary = false;
-	private boolean hasBlackMarket = false;
-	private boolean hasRefuel = false;
-	private boolean hasRepair = false;
-	private boolean hasReArm = false;
-	private boolean hasOutfitting = false;
-	private boolean hasShipyard = false;
-	private boolean hasCommodities = false;
+	private boolean						isPlanetary						= false;
+	private boolean						hasBlackMarket				= false;
+	private boolean						hasRefuel							= false;
+	private boolean						hasRepair							= false;
+	private boolean						hasReArm							= false;
+	private boolean						hasOutfitting					= false;
+	private boolean						hasShipyard						= false;
+	private boolean						hasCommodities				= false;
 
-	private Set<Commodity> importCommodities = new HashSet<Commodity>();
-	private Set<Commodity> exportCommodities = new HashSet<Commodity>();
-	private Set<Commodity> prohibitedCommodities = new HashSet<Commodity>();
+	private Set<Commodity>		importCommodities			= new HashSet<Commodity>();
+	private Set<Commodity>		exportCommodities			= new HashSet<Commodity>();
+	private Set<Commodity>		prohibitedCommodities	= new HashSet<Commodity>();
 
-	private Set<ECONOMY_TYPE> economies = new HashSet<ECONOMY_TYPE>();
-	private Date stationUpdatedAt = new Date(0L);
-	private Set<String> sellingModules = new HashSet<String>();
+	private Set<ECONOMY_TYPE>	economies							= new HashSet<ECONOMY_TYPE>();
+	private Date							stationUpdatedAt			= new Date(0L);
+	private Set<String>				sellingModules				= new HashSet<String>();
 
 	public String getBaseName() {
 		return baseName;
@@ -243,7 +243,7 @@ public class Station {
 	}
 
 	public void addEconomy(ECONOMY_TYPE type) {
-		if(this.economies == null) {
+		if (this.economies == null) {
 			this.economies = new HashSet<ECONOMY_TYPE>();
 		}
 		this.economies.add(type);
@@ -254,14 +254,14 @@ public class Station {
 	}
 
 	public void addImportCommodity(BaseCommodity commodity) {
-		if(this.importCommodities == null) {
+		if (this.importCommodities == null) {
 			this.importCommodities = new HashSet<Commodity>();
 		}
 		this.importCommodities.add(commodity);
 	}
 
 	public void addExportCommodity(BaseCommodity commodity) {
-		if(this.exportCommodities == null) {
+		if (this.exportCommodities == null) {
 			this.exportCommodities = new HashSet<Commodity>();
 		}
 		this.exportCommodities.add(commodity);

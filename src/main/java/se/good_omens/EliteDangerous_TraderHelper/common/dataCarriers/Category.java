@@ -6,9 +6,9 @@ import se.good_omens.xmlModel.XmlNode;
 
 public class Category implements CommodityCategory {
 
-	private COMMODITY_CATEGORY category;
-	private int id;
-	private String name;
+	private COMMODITY_CATEGORY	category;
+	private int									id;
+	private String							name;
 
 	public Category(String name) {
 		this(COMMODITY_CATEGORY.fromString(name));
@@ -27,12 +27,12 @@ public class Category implements CommodityCategory {
 	public Category(int id, String name) {
 		COMMODITY_CATEGORY catId = COMMODITY_CATEGORY.fromInt(id);
 		COMMODITY_CATEGORY catName = COMMODITY_CATEGORY.fromString(name);
-		if((catId != COMMODITY_CATEGORY.NOT_DEFINED) || (catName != COMMODITY_CATEGORY.NOT_DEFINED)) {
-			if(catId != COMMODITY_CATEGORY.NOT_DEFINED) {
+		if ((catId != COMMODITY_CATEGORY.NOT_DEFINED) || (catName != COMMODITY_CATEGORY.NOT_DEFINED)) {
+			if (catId != COMMODITY_CATEGORY.NOT_DEFINED) {
 				this.category = catId;
 				this.id = catId.getIndex();
 				this.name = catName.getName();
-			} else if(catName != COMMODITY_CATEGORY.NOT_DEFINED) {
+			} else if (catName != COMMODITY_CATEGORY.NOT_DEFINED) {
 				this.category = catName;
 				this.name = catName.getName();
 				this.id = catName.getIndex();
@@ -43,14 +43,15 @@ public class Category implements CommodityCategory {
 	}
 
 	public int getId() {
-		return this.category.getIndex();
+		return this.id;
 	}
 
 	public String getName() {
-		return this.category.getName();
+		return this.name;
 	}
 
 	public XmlNode generateXmlRepresentation() {
-		return new XmlNode("commodities", "category").addAttribute("id", new Integer(this.id).toString()).setTextValue(this.getName());
+		return new XmlNode("commodities", "category").addAttribute("id", new Integer(this.getId()).toString())
+		    .setTextValue(this.getName());
 	}
 }
