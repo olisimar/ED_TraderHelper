@@ -1,4 +1,4 @@
-package se.good_omens.EliteDangerous_TraderHelper.common.utils;
+package se.good_omens.EliteDangerous_TraderHelper.common.parsers;
 
 import java.util.Date;
 import java.util.Iterator;

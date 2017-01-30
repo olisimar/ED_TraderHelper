@@ -9,8 +9,8 @@ import org.testng.annotations.Test;
 import org.testng.reporters.Files;
 
 import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.Station;
-import se.good_omens.EliteDangerous_TraderHelper.common.utils.ParseListings;
-import se.good_omens.EliteDangerous_TraderHelper.common.utils.ParseStationJSON;
+import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseListings;
+import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseStationJSON;
 
 public class testLoadingCommoditiesOnStations {
 	public static String	protocol	= "file:///";
