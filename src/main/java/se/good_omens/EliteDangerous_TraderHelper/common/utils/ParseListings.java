@@ -11,6 +11,7 @@ public class ParseListings {
 	private long statCommoditiesTotal = 0l;
 	private long statCommoditiesBought = 0l;
 	private long statCommoditiesSold = 0l;
+
 	public TreeMap<Long, Station> parseListings(String inData, TreeMap<Long, Station> stations) {
 		if((inData == null) || inData.trim().isEmpty()) {
 			throw new IllegalArgumentException("Listing data was null/empty.");
