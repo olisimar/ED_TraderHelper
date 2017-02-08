@@ -127,14 +127,14 @@ public class BaseCommodity implements Commodity {
 
 		toReturn.addAttribute("id", new Integer(this.getCommodity().getId()).toString());
 		toReturn
-		.addChildNode(new XmlNode("category").addAttribute("id", new Integer(this.getCategory().getIndex()).toString())
-				.setTextValue(this.getCategory().getName()));
+		    .addChildNode(new XmlNode("category").addAttribute("id", new Integer(this.getCategory().getIndex()).toString())
+		        .setTextValue(this.getCategory().getName()));
 		toReturn.addChildNode(new XmlNode("name").setTextValue(this.getName()));
 		toReturn.addChildNode(new XmlNode("averagePrice").setTextValue(new Long(this.getAveragePrice()).toString()));
 		toReturn.addChildNode(new XmlNode("sellingPrice").addAttribute("sold", this.isSold().toString())
-				.setTextValue(new Long(this.getSellingPrice()).toString()));
+		    .setTextValue(new Long(this.getSellingPrice()).toString()));
 		toReturn.addChildNode(new XmlNode("buyingPrice").addAttribute("bought", this.isSold().toString())
-				.setTextValue(new Long(this.getBuyingPrice()).toString()));
+		    .setTextValue(new Long(this.getBuyingPrice()).toString()));
 		toReturn.addAttribute("illegal", this.isIllegal().toString());
 		toReturn.addAttribute("rare", rare.toString());
 
@@ -157,7 +157,7 @@ public class BaseCommodity implements Commodity {
 		if (toReturn.getCommodity() != COMMODITY_DATA.NOT_DEFINED) {
 			if (!node.getChildByName("name").getTextValue().equalsIgnoreCase(toReturn.getName())) {
 				throw new IllegalArgumentException("Node did not match in name. Got '"
-						+ node.getChildByName("name").getTextValue() + "', expected '" + toReturn.getName() + "'.");
+				    + node.getChildByName("name").getTextValue() + "', expected '" + toReturn.getName() + "'.");
 			}
 		}
 		toReturn.setBought(new Boolean(node.getChildByName("buyingPrice").getAttributeValue("bought")));

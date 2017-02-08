@@ -12,23 +12,24 @@ import se.good_omens.EliteDangerous_TraderHelper.common.enums.SYSTEM_STATE;
 
 public class StarSystem {
 
-	private final long id;
-	private final String name;
-	private Position position;
-	private String faction = null;
-	private long population = 0L;
-	private GOVERMENT_TYPE government = GOVERMENT_TYPE.NONE;
-	private ALLEGIANCE allegiance;
-	private SYSTEM_STATE state = SYSTEM_STATE.NONE;
-	private SECURITY_RATING secRating = SECURITY_RATING.NONE;
-	private ECONOMY_TYPE primaryEconomy = ECONOMY_TYPE.NONE;
-	private POWER power = POWER.NONE;
-	private POWER_STATE powerState = POWER_STATE.NONE;
-	private boolean needsPermit = false;
-	private Date updatedAt = new Date(0L);
-	private String simbadRef = "";
+	private final long			id;
+	private final String		name;
+	private Position				position;
+	private String					faction					= null;
+	private long						population			= 0L;
+	private GOVERMENT_TYPE	government			= GOVERMENT_TYPE.NONE;
+	private ALLEGIANCE			allegiance;
+	private SYSTEM_STATE		state						= SYSTEM_STATE.NONE;
+	private SECURITY_RATING	secRating				= SECURITY_RATING.NONE;
+	private ECONOMY_TYPE		primaryEconomy	= ECONOMY_TYPE.NONE;
+	private POWER						power						= POWER.NONE;
+	private POWER_STATE			powerState			= POWER_STATE.NONE;
+	private boolean					needsPermit			= false;
+	private Date						updatedAt				= new Date(0L);
+	private String					simbadRef				= "";
+
 	/*
-,"power_state":null
+	 * ,"power_state":null
 	 */
 	public StarSystem(long id, String name) {
 		this.id = id;
@@ -146,6 +147,4 @@ public class StarSystem {
 	public Position getPosition() {
 		return position;
 	}
-
-
 }
