@@ -1,10 +1,13 @@
 package se.good_omens.EliteDangerous_TraderHelper.GUI;
 
-import se.good_omens.EliteDangerous_TraderHelper.common.utils.SystemData;
+import se.good_omens.EliteDangerous_TraderHelper.common.utils.RuntimeProperties;
 
 public class BaseWindowLoader {
 
-	public BaseWindowLoader() {
-		SystemData sysData = new SystemData();
+	private final RuntimeProperties properties;
+
+	public BaseWindowLoader(RuntimeProperties properties) {
+		this.properties = properties;
+
 	}
 }
