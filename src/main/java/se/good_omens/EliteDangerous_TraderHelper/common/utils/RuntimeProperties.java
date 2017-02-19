@@ -37,6 +37,10 @@ public class RuntimeProperties {
 		}
 		this.properties.put(key, value);
 	}
+	
+	public void removeEntry(String key) {
+		this.properties.remove(key);
+	}
 
 	public String getEntry(String key) {
 		return properties.get(key);

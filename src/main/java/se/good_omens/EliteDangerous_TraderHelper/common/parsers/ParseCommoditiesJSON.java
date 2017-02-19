@@ -12,6 +12,15 @@ import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.BaseCommodi
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_CATEGORY;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_DATA;
 
+
+/**
+ * Parser for the commodities JSON.
+ * It does not in fact parse it for commodities as enums are used for this purpose. It does however check for new
+ * categories as well as commodities to be introduced into it. Will need to be refactored to deal with unknown items
+ * if released to other people. 
+ * @author TuX
+ *
+ */
 public class ParseCommoditiesJSON {
 	private final String orginalData;
 	private final TreeMap<Long, BaseCommodity> baseCommidities = new TreeMap<Long, BaseCommodity>();
@@ -24,6 +33,7 @@ public class ParseCommoditiesJSON {
 		this.orginalData = data;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void parseCommoditiesJSON() {
 		try {
 			JSONParser parser = new JSONParser();
@@ -42,7 +52,6 @@ public class ParseCommoditiesJSON {
 	}
 
 	private void parseSingleCommodityJSON(JSONObject next) {
-		// 	, ANTIQUITIES(96, "Antiquities", 120365, COMMODITY_CATEGORY.SALVAGE)
 		String toPrint = ", "+ next.get("name").toString().replaceAll(" ", "_").replaceAll("-", "_").replaceAll("\\.", "").toUpperCase() +"(";
 		toPrint = toPrint + next.get("id") +", \"";
 		toPrint = toPrint + next.get("name") + "\", ";
@@ -59,6 +68,7 @@ public class ParseCommoditiesJSON {
 		toPrint = toPrint + "COMMODITY_CATEGORY." + cat.name() + ")";
 		COMMODITY_DATA data = COMMODITY_DATA.fromInt(new Integer(next.get("id").toString()).intValue());
 		if(data == COMMODITY_DATA.NOT_DEFINED) {
+			// System.out.println(toPrint); // Use when entering new items.
 			throw new IllegalStateException("Found new Commodity, add: "+ toPrint);
 		}
 	}

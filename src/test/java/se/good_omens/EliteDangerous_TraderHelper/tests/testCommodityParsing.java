@@ -12,8 +12,8 @@ import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseCommodities
 
 public class testCommodityParsing {
 	public static String	protocol	= "file:///";
-	public static String	filePath	= "C:/OWN/LunaWorkspace/ED_TraderHelper/rawData/";
-
+	public static String	filePath	= "C:/Users/TuX/workspace/ED_TraderHelper/rawData/";
+	
 	@Test
 	public void printAll() throws ParseException {
 		try {

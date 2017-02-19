@@ -13,12 +13,12 @@ import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseSystemJSON;
 public class testSystemParsing {
 
 	public static String	protocol	= "file:///";
-	public static String	filePath	= "C:/OWN/LunaWorkspace/ED_TraderHelper/rawData/";
+	public static String	filePath	= "C:/Users/TuX/workspace/ED_TraderHelper/rawData/";
 
 	@Test
 	public void printAll() throws ParseException {
 		try {
-			ParseSystemJSON sysParser = new ParseSystemJSON(Files.readFile(new File(filePath + "systems.json")));
+			ParseSystemJSON sysParser = new ParseSystemJSON(Files.readFile(new File(filePath + "systems_populated.json")));
 			sysParser.parseSystemJSON();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

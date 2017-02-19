@@ -75,7 +75,7 @@ public class ParseSystemJSON {
 				current.setPopulation((Long)obj.get("population"));
 			}
 			current.setUpdatedAt(new Date((Long)obj.get("updated_at")));
-			if((obj.get("needs_permit") != null) && ((Long)obj.get("needs_permit") != 0)) {
+			if((obj.get("needs_permit") != null) && ((Boolean)obj.get("needs_permit") == true)) {
 				current.setNeedsPermit(true);
 			}
 			current.setSimbadRef((String)obj.get("simbad_ref"));
