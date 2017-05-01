@@ -11,14 +11,14 @@ public class RuntimeProperties {
 	private HashMap<String,String> properties;
 
 	private RuntimeProperties() {
-		this.properties = new HashMap<>();
+		this.properties = new HashMap<String, String>();
 	}
 
 	/*
 	 * Deep clone creation, probably not necessary.
 	 */
 	private RuntimeProperties(Map<String, String> properties) {
-		this.properties = new HashMap<>();
+		this.properties = new HashMap<String, String>();
 		for(Entry<String,String> item : properties.entrySet()) {
 			this.properties.put( new String(item.getKey()), new String(item.getValue()) );
 		}
@@ -47,6 +47,6 @@ public class RuntimeProperties {
 	}
 
 	public List<String> listKeys() {
-		return new ArrayList<>(properties.keySet());
+		return new ArrayList<String>(properties.keySet());
 	}
 }

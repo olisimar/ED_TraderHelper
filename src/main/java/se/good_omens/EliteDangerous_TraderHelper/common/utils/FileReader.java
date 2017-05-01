@@ -1,4 +1,4 @@
-package se.good_omens.EliteDangerous_TraderHelper.common.utils;
+ package se.good_omens.EliteDangerous_TraderHelper.common.utils;
 
 import java.io.IOException;
 import java.net.URI;
