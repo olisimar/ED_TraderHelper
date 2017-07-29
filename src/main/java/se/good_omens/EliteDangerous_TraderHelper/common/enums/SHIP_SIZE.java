@@ -2,11 +2,11 @@ package se.good_omens.EliteDangerous_TraderHelper.common.enums;
 
 public enum SHIP_SIZE {
 
-	NONE("NONE")
-	, UNKNOWN("Unknown")
-	, S("Small")
-	,	M("Medium")
-	,	L("Large")
+	  NONE("none")
+	, UNKNOWN("unknown")
+	, SMALL("S")
+	,	MEDIUM("M")
+	,	LARGE("L")
 	;
 
 

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.ALLEGIANCE;
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_DATA;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.ECONOMY_TYPE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.GOVERMENT_TYPE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.SHIP_SIZE;
@@ -16,15 +17,14 @@ public class Station {
 	private long							id;
 	private String						baseName;
 	private long							systemId;
-	private SHIP_SIZE					maxLandingPadSize			= SHIP_SIZE.M;
+	private SHIP_SIZE					maxLandingPadSize			= SHIP_SIZE.NONE;
 	private long							distanceToStar				= -1L;
 	private String						localFaction					= "";
 	private GOVERMENT_TYPE		goverment							= GOVERMENT_TYPE.NONE;
 	private ALLEGIANCE				allegiance						= ALLEGIANCE.NONE;
 	private STATION_STATE			state									= STATION_STATE.NONE;
 	private long							typeId								= 0;
-	private SHIP_SIZE					maxSize;
-
+	
 	private boolean						isPlanetary						= false;
 	private boolean						hasBlackMarket				= false;
 	private boolean						hasRefuel							= false;
@@ -34,9 +34,9 @@ public class Station {
 	private boolean						hasShipyard						= false;
 	private boolean						hasCommodities				= false;
 
-	private Set<Commodity>		importCommodities			= new HashSet<Commodity>();
-	private Set<Commodity>		exportCommodities			= new HashSet<Commodity>();
-	private Set<Commodity>		prohibitedCommodities	= new HashSet<Commodity>();
+	private Set<BaseCommodity>		importCommodities			= new HashSet<BaseCommodity>();
+	private Set<BaseCommodity>		exportCommodities			= new HashSet<BaseCommodity>();
+	private Set<COMMODITY_DATA>		prohibitedCommodities	= new HashSet<COMMODITY_DATA>();
 
 	private Set<ECONOMY_TYPE>	economies							= new HashSet<ECONOMY_TYPE>();
 	private Date							stationUpdatedAt			= new Date(0L);
@@ -114,14 +114,6 @@ public class Station {
 		this.typeId = typeId;
 	}
 
-	public SHIP_SIZE getMaxSize() {
-		return maxSize;
-	}
-
-	public void setMaxSize(SHIP_SIZE maxSize) {
-		this.maxSize = maxSize;
-	}
-
 	public boolean isPlanetary() {
 		return isPlanetary;
 	}
@@ -186,27 +178,27 @@ public class Station {
 		this.hasCommodities = hasCommodities;
 	}
 
-	public Set<Commodity> getImportCommodities() {
+	public Set<BaseCommodity> getImportCommodities() {
 		return importCommodities;
 	}
 
-	public void setImportCommodities(Set<Commodity> importCommodities) {
+	public void setImportCommodities(Set<BaseCommodity> importCommodities) {
 		this.importCommodities = importCommodities;
 	}
 
-	public Set<Commodity> getExportCommodities() {
+	public Set<BaseCommodity> getExportCommodities() {
 		return exportCommodities;
 	}
 
-	public void setExportCommodities(Set<Commodity> exportCommodities) {
+	public void setExportCommodities(Set<BaseCommodity> exportCommodities) {
 		this.exportCommodities = exportCommodities;
 	}
 
-	public Set<Commodity> getProhibitedCommodities() {
+	public Set<COMMODITY_DATA> getProhibitedCommodities() {
 		return prohibitedCommodities;
 	}
 
-	public void setProhibitedCommodities(Set<Commodity> prohibitedCommodities) {
+	public void setProhibitedCommodities(Set<COMMODITY_DATA> prohibitedCommodities) {
 		this.prohibitedCommodities = prohibitedCommodities;
 	}
 
@@ -255,15 +247,22 @@ public class Station {
 
 	public void addImportCommodity(BaseCommodity commodity) {
 		if (this.importCommodities == null) {
-			this.importCommodities = new HashSet<Commodity>();
+			this.importCommodities = new HashSet<BaseCommodity>();
 		}
 		this.importCommodities.add(commodity);
 	}
 
 	public void addExportCommodity(BaseCommodity commodity) {
 		if (this.exportCommodities == null) {
-			this.exportCommodities = new HashSet<Commodity>();
+			this.exportCommodities = new HashSet<BaseCommodity>();
 		}
 		this.exportCommodities.add(commodity);
+	}
+
+	public void addProhibitedCommodities(COMMODITY_DATA commodity) {
+		if (this.prohibitedCommodities == null) {
+			this.prohibitedCommodities = new HashSet<COMMODITY_DATA>();
+		}
+		this.prohibitedCommodities.add(commodity);
 	}
 }

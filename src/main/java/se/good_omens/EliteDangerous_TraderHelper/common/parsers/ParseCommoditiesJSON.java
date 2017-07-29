@@ -68,7 +68,7 @@ public class ParseCommoditiesJSON {
 		toPrint = toPrint + "COMMODITY_CATEGORY." + cat.name() + ")";
 		COMMODITY_DATA data = COMMODITY_DATA.fromInt(new Integer(next.get("id").toString()).intValue());
 		if(data == COMMODITY_DATA.NOT_DEFINED) {
-			// System.out.println(toPrint); // Use when entering new items.
+			//System.out.println(toPrint); // Use when entering new items.
 			throw new IllegalStateException("Found new Commodity, add: "+ toPrint);
 		}
 	}
