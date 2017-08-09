@@ -8,12 +8,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.ShipModule;
 import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.Station;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.ALLEGIANCE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_DATA;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.ECONOMY_TYPE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.GOVERMENT_TYPE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.SHIP_SIZE;
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.SHIP_TYPE;
 
 public class ParseStationJSON {
 
@@ -55,8 +57,10 @@ public class ParseStationJSON {
 	
 	private final String											orginalData;
 	private final TreeMap<Long, Station>			stations			= new TreeMap<Long, Station>();
+	private final ParseModules 								parserModules;
 
-	public ParseStationJSON(String data) {
+	public ParseStationJSON(String data, ParseModules parserModules) {
+		this.parserModules = parserModules;
 		this.orginalData = data;
 	}
 
@@ -144,6 +148,30 @@ public class ParseStationJSON {
 
 				if (data.get("distance_to_star") != null) { // might be null
 					current.setDistanceToStar(new Long(data.get("distance_to_star").toString()).longValue());
+				}
+				
+				// Parsing ships into the stations data
+				if(data.get("selling_ships") != null && data.get("selling_ships") instanceof JSONArray) {
+					JSONArray soldShips = (JSONArray) data.get("selling_ships");
+					Iterator<?> iter = soldShips.iterator();
+					while(iter.hasNext()) {
+						SHIP_TYPE type = SHIP_TYPE.fromString((String) iter.next());
+						if(type != SHIP_TYPE.UNKNOWN || type != SHIP_TYPE.NONE) {
+							current.addSoldShip(type);
+						}
+					}
+				}
+
+				// Parsing ship modules into the stations data
+				if(data.get("selling_modules") != null && data.get("selling_modules") instanceof JSONArray) {
+					JSONArray soldModules = (JSONArray) data.get("selling_modules");
+					Iterator<?> iter = soldModules.iterator();
+					while(iter.hasNext()) {
+						ShipModule module = this.parserModules.getShipModules().get((Integer) iter.next());
+						if(module != null) {
+							current.addSoldModules(module);
+						}
+					}
 				}
 
 				return current;

@@ -20,25 +20,6 @@ public class ParseModules {
 	public ParseModules(String originalData) {
 		this.orginalData = originalData;
 	}
-/*
-	@SuppressWarnings("unchecked")
-	public void parseCommoditiesJSON() {
-		try {
-			JSONParser parser = new JSONParser();
-			Object data = parser.parse(orginalData);
-			if (data.getClass() == JSONObject.class) {
-
-			} else if (data.getClass() == JSONArray.class) {
-				Iterator<JSONObject> iter = ((JSONArray)data).iterator();
-				while(iter.hasNext()) {
-					this.parseSingleCommodityJSON(iter.next());
-				}
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-	 */
 	
 	@SuppressWarnings("unchecked")
 	public void parseCommodities() {
@@ -64,10 +45,19 @@ public class ParseModules {
 	// "category":"Bulkhead"}}
 	private void parseSingleModuleJSON(JSONObject next) {
 		ShipModule shipModule = new ShipModule(Integer.parseInt(next.get("id").toString()));
-		if(next.get("ship") != null && next.get("ship").toString().isEmpty()) {
+		if(next.get("ship") != null && !next.get("ship").toString().isEmpty()) {
 			shipModule.setShipType(SHIP_TYPE.fromString(next.get("ship").toString()));
 		}
-		shipModule.setRating(next.get("rating").toString());
+		
+		if(next.get("rating") != null) {
+			shipModule.setRating(next.get("rating").toString());
+		}
+		if(next.get("class") != null) {
+			shipModule.setModClass(Integer.parseInt(next.get("class").toString()));
+		}
+		if(next.get("price") != null) {
+			shipModule.setPrice(Integer.parseInt(next.get("price").toString()));
+		}
 
 		JSONObject groupData = (JSONObject) next.get("group");
 		shipModule.setName(groupData.get("name").toString());

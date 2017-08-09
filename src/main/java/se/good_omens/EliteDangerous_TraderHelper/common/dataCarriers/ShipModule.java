@@ -72,7 +72,7 @@ public class ShipModule {
 	}
 	
 	public String toString() {
-		return new String(id +":"+ shipType +"."+ name +" ["+ modRating +":"+ modClass +"] ("+ slotType.name()+")");
+		return new String(id +":"+ shipType.getUsedName() +">"+ name +" ["+ modRating +":"+ modClass +"] ("+ slotType.name()+")");
 	}
 
 	public int getModClass() {

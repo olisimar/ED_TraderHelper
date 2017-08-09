@@ -9,6 +9,7 @@ import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_DATA;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.ECONOMY_TYPE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.GOVERMENT_TYPE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.SHIP_SIZE;
+import se.good_omens.EliteDangerous_TraderHelper.common.enums.SHIP_TYPE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.STATION_STATE;
 import se.good_omens.EliteDangerous_TraderHelper.common.interfaces.Commodity;
 
@@ -37,6 +38,8 @@ public class Station {
 	private Set<BaseCommodity>		importCommodities			= new HashSet<BaseCommodity>();
 	private Set<BaseCommodity>		exportCommodities			= new HashSet<BaseCommodity>();
 	private Set<COMMODITY_DATA>		prohibitedCommodities	= new HashSet<COMMODITY_DATA>();
+	private Set<SHIP_TYPE>				soldShips							= new HashSet<SHIP_TYPE>();
+	private Set<ShipModule>				soldModules						= new HashSet<ShipModule>();
 
 	private Set<ECONOMY_TYPE>	economies							= new HashSet<ECONOMY_TYPE>();
 	private Date							stationUpdatedAt			= new Date(0L);
@@ -264,5 +267,35 @@ public class Station {
 			this.prohibitedCommodities = new HashSet<COMMODITY_DATA>();
 		}
 		this.prohibitedCommodities.add(commodity);
+	}
+
+	public Set<SHIP_TYPE> getSoldShips() {
+		return soldShips;
+	}
+
+	public void setSoldShips(Set<SHIP_TYPE> soldShips) {
+		this.soldShips = soldShips;
+	}
+	
+	public void addSoldShip(SHIP_TYPE type) {
+		if(this.soldShips == null) {
+			this.soldShips = new HashSet<SHIP_TYPE>();
+		}
+		this.soldShips.add(type);
+	}
+
+	public Set<ShipModule> getSoldModules() {
+		return soldModules;
+	}
+
+	public void setSoldModules(Set<ShipModule> soldModules) {
+		this.soldModules = soldModules;
+	}
+	
+	public void addSoldModules(ShipModule module) {
+		if(this.soldModules == null) {
+			this.soldModules = new HashSet<ShipModule>();
+		}
+		this.soldModules.add(module);
 	}
 }
