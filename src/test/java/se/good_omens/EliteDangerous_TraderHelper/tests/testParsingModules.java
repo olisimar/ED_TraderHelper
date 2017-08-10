@@ -20,7 +20,7 @@ public class testParsingModules {
 	public void printAll() throws ParseException {
 		try {
 			ParseModules sParser = new ParseModules(Files.readFile(new File(filePath + "modules.json")));
-			sParser.parseCommodities();
+			sParser.parseModules();
 			for(Entry<Integer, ShipModule> mod : sParser.getShipModules().entrySet()) {
 				System.out.println(mod.getValue());
 			}

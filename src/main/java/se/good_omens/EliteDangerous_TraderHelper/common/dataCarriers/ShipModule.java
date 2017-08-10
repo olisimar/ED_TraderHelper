@@ -72,7 +72,7 @@ public class ShipModule {
 	}
 	
 	public String toString() {
-		return new String(id +":"+ shipType.getUsedName() +">"+ name +" ["+ modRating +":"+ modClass +"] ("+ slotType.name()+")");
+		return new String(id +":"+ shipType.getUsedName() +" > "+ name +" ["+ modRating +":"+ modClass +"] ("+ slotType.name()+")");
 	}
 
 	public int getModClass() {
@@ -82,4 +82,20 @@ public class ShipModule {
 	public void setModClass(int modClass) {
 		this.modClass = modClass;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof ShipModule) {
+			ShipModule comp = (ShipModule) obj;
+			if(this.id.equals(comp.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return this.id;
+	}	
 }

@@ -10,6 +10,7 @@ import org.testng.reporters.Files;
 
 import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.Station;
 import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseListings;
+import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseModules;
 import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseStationJSON;
 
 public class testLoadingCommoditiesOnStations {
@@ -19,7 +20,8 @@ public class testLoadingCommoditiesOnStations {
 	@Test
 	public void load() {
 		try {
-			ParseStationJSON sParser = new ParseStationJSON(Files.readFile(new File(filePath + "stations.json")));
+			ParseModules mParser = new ParseModules(Files.readFile(new File(filePath + "modules.json")));
+			ParseStationJSON sParser = new ParseStationJSON(Files.readFile(new File(filePath + "stations.json")), mParser);
 			sParser.parseStationJSON();
 			TreeMap<Long, Station> stations = sParser.getStations();
 			String data = Files.readFile(new File(filePath + "listings.csv"));

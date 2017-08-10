@@ -22,7 +22,7 @@ public class ParseModules {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void parseCommodities() {
+	public void parseModules() {
 		try {
 			JSONParser parser = new JSONParser();
 			Object data = parser.parse(orginalData);
@@ -40,9 +40,7 @@ public class ParseModules {
 		
 	}
 
-	//{"id":738,"group_id":50,"class":1,"rating":"I","price":null,"weapon_mode":null,"missile_type":null,"name":null,"belongs_to":null,
-	// "ed_id":128049250,"ed_symbol":"SideWinder_Armour_Grade1","ship":"Sidewinder Mk. I","group":{"id":50,"category_id":40,"name":"Lightweight Alloy",
-	// "category":"Bulkhead"}}
+
 	private void parseSingleModuleJSON(JSONObject next) {
 		ShipModule shipModule = new ShipModule(Integer.parseInt(next.get("id").toString()));
 		if(next.get("ship") != null && !next.get("ship").toString().isEmpty()) {

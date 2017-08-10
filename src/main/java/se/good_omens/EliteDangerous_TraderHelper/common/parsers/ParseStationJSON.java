@@ -61,6 +61,7 @@ public class ParseStationJSON {
 
 	public ParseStationJSON(String data, ParseModules parserModules) {
 		this.parserModules = parserModules;
+		parserModules.parseModules();
 		this.orginalData = data;
 	}
 
@@ -167,9 +168,12 @@ public class ParseStationJSON {
 					JSONArray soldModules = (JSONArray) data.get("selling_modules");
 					Iterator<?> iter = soldModules.iterator();
 					while(iter.hasNext()) {
-						ShipModule module = this.parserModules.getShipModules().get((Integer) iter.next());
+						int id = new Long((Long) iter.next()).intValue();
+						ShipModule module = this.parserModules.getShipModules().get( id );
 						if(module != null) {
 							current.addSoldModules(module);
+						} else {
+							System.out.println("Failed to find "+ id);
 						}
 					}
 				}

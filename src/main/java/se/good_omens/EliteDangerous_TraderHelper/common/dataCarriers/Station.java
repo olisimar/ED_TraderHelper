@@ -43,7 +43,6 @@ public class Station {
 
 	private Set<ECONOMY_TYPE>	economies							= new HashSet<ECONOMY_TYPE>();
 	private Date							stationUpdatedAt			= new Date(0L);
-	private Set<String>				sellingModules				= new HashSet<String>();
 
 	public String getBaseName() {
 		return baseName;
@@ -221,14 +220,6 @@ public class Station {
 		this.stationUpdatedAt = stationUpdatedAt;
 	}
 
-	public Set<String> getSellingModules() {
-		return sellingModules;
-	}
-
-	public void setSellingModules(Set<String> sellingModules) {
-		this.sellingModules = sellingModules;
-	}
-
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -285,7 +276,7 @@ public class Station {
 	}
 
 	public Set<ShipModule> getSoldModules() {
-		return soldModules;
+		return this.soldModules;
 	}
 
 	public void setSoldModules(Set<ShipModule> soldModules) {
@@ -297,5 +288,14 @@ public class Station {
 			this.soldModules = new HashSet<ShipModule>();
 		}
 		this.soldModules.add(module);
+	}
+	
+	public ShipModule getSpecificShipModule(int id) {
+		for(ShipModule module : soldModules) {
+			if(module.getId() == id) {
+				return module;
+			}
+		}
+		return null;
 	}
 }
