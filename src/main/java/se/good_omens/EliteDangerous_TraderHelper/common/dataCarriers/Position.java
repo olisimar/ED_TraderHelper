@@ -27,4 +27,16 @@ public class Position {
 	public double getZaxis() {
 		return this.z;
 	}
+	
+	public double distanceTo(Position pos) {
+		// d = sqr of ( (this.x - pos.x)x2 + (this.y - pos.y)x2 + (this.z - pos.z)x2 )
+		double relX = this.x - pos.getXaxis();
+		double relY = this.y - pos.getYaxis();
+		double relZ = this.z - pos.getZaxis();
+		relX = relX * relX;
+		relY = relY * relY;
+		relZ = relZ * relZ;
+		
+		return Math.sqrt(relX + relY + relZ);
+	}
 }

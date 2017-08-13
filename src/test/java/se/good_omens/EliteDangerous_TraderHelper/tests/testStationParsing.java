@@ -16,13 +16,15 @@ import se.good_omens.EliteDangerous_TraderHelper.common.enums.SHIP_TYPE;
 import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseListings;
 import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseModules;
 import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseStationJSON;
+import se.good_omens.EliteDangerous_TraderHelper.common.utils.SystemData;
 
 public class testStationParsing {
 	public static String	protocol	= "file:///";
 	public static String	filePath	= "C:/Users/TuX/workspace/ED_TraderHelper/rawData/";
+	private static SystemData systemData = new SystemData();
 
 	@Test
-	public void printAll() throws ParseException {
+	public void testJSONParsingOfFileContent() throws ParseException {
 		try {
 			ParseModules mParser = new ParseModules(Files.readFile(new File(filePath + "modules.json")));
 			ParseStationJSON sParser = new ParseStationJSON(Files.readFile(new File(filePath + "stations.json")), mParser);
@@ -37,8 +39,8 @@ public class testStationParsing {
 	@Test
 	public void testCommoditiesLoadedOntoStation() {
 		try {
-			ParseModules mParser = new ParseModules(Files.readFile(new File(filePath + "modules.json")));
-			ParseStationJSON sParser = new ParseStationJSON(Files.readFile(new File(filePath + "stations.json")), mParser);
+			ParseModules mParser = new ParseModules(Files.readFile(new File(systemData.getWorkingDirectory() + "\\rawData\\modules.json")));
+			ParseStationJSON sParser = new ParseStationJSON(Files.readFile(new File(systemData.getWorkingDirectory() + "\\rawData\\stations.json")), mParser);
 			sParser.parseStationJSON();
 			TreeMap<Long, Station> stations = sParser.getStations();
 			String data = Files.readFile(new File(filePath + "listings.csv"));
@@ -54,8 +56,8 @@ public class testStationParsing {
 	@Test
 	public void testShipsLoadedOntoStation() {
 		try {
-			ParseModules mParser = new ParseModules(Files.readFile(new File(filePath + "modules.json")));
-			ParseStationJSON sParser = new ParseStationJSON(Files.readFile(new File(filePath + "stations.json")), mParser);
+			ParseModules mParser = new ParseModules(Files.readFile(new File(systemData.getWorkingDirectory() + "\\rawData\\modules.json")));
+			ParseStationJSON sParser = new ParseStationJSON(Files.readFile(new File(systemData.getWorkingDirectory() + "\\rawData\\stations.json")), mParser);
 			sParser.parseStationJSON();
 			TreeMap<Long, Station> stations = sParser.getStations();
 			Station station = stations.get(173l);
@@ -73,8 +75,8 @@ public class testStationParsing {
 	@Test
 	public void testModulesLoadedOntoStation() {
 		try {
-			ParseModules mParser = new ParseModules(Files.readFile(new File(filePath + "modules.json")));
-			ParseStationJSON sParser = new ParseStationJSON(Files.readFile(new File(filePath + "stations.json")), mParser);
+			ParseModules mParser = new ParseModules(Files.readFile(new File(systemData.getWorkingDirectory() + "\\rawData\\modules.json")));
+			ParseStationJSON sParser = new ParseStationJSON(Files.readFile(new File(systemData.getWorkingDirectory() + "\\rawData\\stations.json")), mParser);
 			sParser.parseStationJSON();
 			TreeMap<Long, Station> stations = sParser.getStations();
 			Station station = stations.get(173l);
