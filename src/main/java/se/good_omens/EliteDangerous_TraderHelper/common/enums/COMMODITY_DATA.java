@@ -361,7 +361,7 @@ public enum COMMODITY_DATA {
 	}
 
 	public static COMMODITY_DATA fromString(String sought) {
-		if((sought != null) || !sought.trim().isEmpty()) {
+		if( sought != null) {
 			for(COMMODITY_DATA item : COMMODITY_DATA.values()) {
 				if(item.name().equalsIgnoreCase(sought)) {
 					return item;

@@ -8,53 +8,61 @@ import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_DATA;
 
 public class ParseListings {
 
-	private long statCommoditiesTotal = 0l;
-	private long statCommoditiesBought = 0l;
-	private long statCommoditiesSold = 0l;
+	private long	statCommoditiesTotal	= 0l;
+	private long	statCommoditiesBought	= 0l;
+	private long	statCommoditiesSold		= 0l;
 
 	/**
 	 * Actually parses a listing and adds them to the related station in question.
+	 * 
 	 * @param inData
 	 * @param stations
 	 * @return stations
 	 */
 	public TreeMap<Long, Station> parseListings(String inData, TreeMap<Long, Station> stations) {
-		if((inData == null) || inData.trim().isEmpty()) {
+		if ((inData == null) || inData.trim().isEmpty()) {
 			throw new IllegalArgumentException("Listing data was null/empty.");
 		}
 		String[] listings = inData.split("\n");
-		for(String listing : listings) {
+		for (String listing : listings) {
 			addListingToStations(listing, stations);
 		}
 
-		System.out.println(" Total: "+ statCommoditiesTotal +"\nBought: "+ statCommoditiesBought +"\n  Sold: "+ statCommoditiesSold);
+		System.out.println(
+		    " Total: " + statCommoditiesTotal + "\nBought: " + statCommoditiesBought + "\n  Sold: " + statCommoditiesSold);
 		return stations;
 	}
 
-	private void addListingToStations(String listing, TreeMap<Long, Station> stations) {
+	private TreeMap<Long, Station> addListingToStations(String listing, TreeMap<Long, Station> stations) {
 		String[] item = listing.split(",");
-		if(!item[0].equals("id")) {
-			// 0 id, 1 station id, 2 commodity id, 3 supply, 4 buy_price, 5 sell_price, 6 demand
+		if (!item[0].equals("id")) {
+			// 0:id, 1:station id, 2:commodity id, 3:supply, 4:buy_price, 5:sell_price, 6:demand
+			// id,station_id,commodity_id,supply,buy_price,sell_price,demand,collected_at
+			// 1,1,5,0,0,476,1065,1500915774
 			Station station = stations.get(new Long(item[1]).longValue());
-			if(station != null) {
-				COMMODITY_DATA data = COMMODITY_DATA.fromInt(new Long(item[2]).intValue());
+			if (station != null) {
+				COMMODITY_DATA data = COMMODITY_DATA.fromInt(new Integer(item[2]).intValue());
 				BaseCommodity com = new BaseCommodity(data);
+				com.setSupply(new Integer(item[3]).intValue());
+				com.setSellingPrice(new Integer(item[5]).intValue());
+
+				com.setBuyingPrice(new Integer(item[4]).intValue());
+				com.setDemand(new Integer(item[6]).intValue());
 				statCommoditiesTotal++;
-				if(new Long(item[3]).longValue() != 0) {
+				if (com.getSupply() != 0) {
 					com.setSold(true);
-					com.setSellingPrice(new Long(item[5]).intValue());
-					station.addExportCommodity(com);
+					station.addSoldCommodity(com);
 					statCommoditiesSold++;
 				}
-				if(new Long(item[6]).longValue() != 0) {
+				if (com.getDemand() != 0) {
 					com.setBought(true);
-					com.setBuyingPrice(new Long(item[4]).intValue());
-					station.addImportCommodity(com);
+					station.addBoughtCommodity(com);
 					statCommoditiesBought++;
 				}
 			} else {
-				System.out.println("Failed to find requested station from provided list, concerns stationId: "+ item[1]);
+				System.out.println("Failed to find requested station from provided list, concerns stationId: " + item[1]);
 			}
 		}
+		return stations;
 	}
 }

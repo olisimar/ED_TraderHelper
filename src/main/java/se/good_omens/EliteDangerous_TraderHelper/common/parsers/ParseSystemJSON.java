@@ -21,14 +21,22 @@ import se.good_omens.EliteDangerous_TraderHelper.common.enums.SYSTEM_STATE;
 
 public class ParseSystemJSON {
 
-	private final String									originalData;
-	private TreeMap<Long, StarSystem>	systems			= new TreeMap<Long, StarSystem>();
+	private final String							originalData;
+	private TreeMap<Long, StarSystem>	systems				= new TreeMap<Long, StarSystem>();
 
 
 	public ParseSystemJSON(String data) {
 		this.originalData = data;
 	}
+	
+	public TreeMap<Long, StarSystem> getSystems() {
+		if(this.systems.isEmpty()) {
+			this.parseSystemJSON();
+		}
+		return this.systems;
+	}
 
+	@SuppressWarnings("rawtypes")
 	public void parseSystemJSON() {
 		try {
 			JSONParser parser = new JSONParser();

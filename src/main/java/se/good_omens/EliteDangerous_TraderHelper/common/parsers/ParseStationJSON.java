@@ -92,6 +92,7 @@ public class ParseStationJSON {
 			if (next instanceof JSONObject) {
 				current.setId(new Long(data.get("id").toString()).longValue());
 				current.setBaseName(data.get("name").toString());
+				current.setSystemId(new Long(data.get("system_id").toString()).longValue());
 				if (data.get("allegiance") != null) {
 					current.setAllegiance(ALLEGIANCE.fromString(data.get("allegiance").toString()));
 				} else {

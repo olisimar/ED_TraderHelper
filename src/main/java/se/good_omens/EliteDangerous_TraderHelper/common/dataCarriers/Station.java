@@ -1,7 +1,9 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.ALLEGIANCE;
@@ -40,6 +42,8 @@ public class Station {
 	private Set<COMMODITY_DATA>		prohibitedCommodities	= new HashSet<COMMODITY_DATA>();
 	private Set<SHIP_TYPE>				soldShips							= new HashSet<SHIP_TYPE>();
 	private Set<ShipModule>				soldModules						= new HashSet<ShipModule>();
+	private List<BaseCommodity>		soldCommodities				= new ArrayList<>();
+	private List<BaseCommodity>		boughtCommodities			= new ArrayList<>();
 
 	private Set<ECONOMY_TYPE>	economies							= new HashSet<ECONOMY_TYPE>();
 	private Date							stationUpdatedAt			= new Date(0L);
@@ -297,5 +301,40 @@ public class Station {
 			}
 		}
 		return null;
+	}
+
+	public List<BaseCommodity> getBoughtCommodities() {
+		return boughtCommodities;
+	}
+
+	public void setBoughtCommodities(List<BaseCommodity> boughtCommodities) {
+		if(boughtCommodities == null) {
+			boughtCommodities = new ArrayList<>();
+		}
+		this.boughtCommodities = boughtCommodities;
+	}
+	public void addBoughtCommodity(BaseCommodity comm) {
+		if(this.boughtCommodities == null) {
+			this.boughtCommodities = new ArrayList<>();
+		}
+		this.boughtCommodities.add(comm);
+	}
+
+	public List<BaseCommodity> getSoldCommodities() {
+		return soldCommodities;
+	}
+
+	public void setSoldCommodities(List<BaseCommodity> soldCommodities) {
+		if(soldCommodities == null) {
+			soldCommodities = new ArrayList<>();
+		}
+		this.soldCommodities = soldCommodities;
+	}
+	
+	public void addSoldCommodity(BaseCommodity comm) {
+		if(this.soldCommodities == null) {
+			this.soldCommodities = new ArrayList<>();
+		}
+		this.soldCommodities.add(comm);
 	}
 }

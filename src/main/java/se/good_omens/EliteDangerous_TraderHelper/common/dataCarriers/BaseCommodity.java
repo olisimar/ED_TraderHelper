@@ -18,13 +18,16 @@ public class BaseCommodity implements Commodity {
 	private COMMODITY_DATA			commodity;
 	private COMMODITY_CATEGORY	category;
 	private String							name;
-	private long								averagePrice;
+	private int								averagePrice;
 	private Boolean							sold					= false;
 	private Boolean							bought				= true;
 	private Boolean							illegal				= false;
-	private long								sellingPrice	= 0L;
-	private long								buyingPrice		= 0L;
+	
+	private int									sellingPrice	= 0;
+	private int									buyingPrice		= 0;
 	private Boolean							rare					= false;
+	private int 								supply				= 0;
+	private int 								demand				= 0;
 
 	public BaseCommodity(int id) {
 		this.commodity = COMMODITY_DATA.fromInt(id);
@@ -94,23 +97,39 @@ public class BaseCommodity implements Commodity {
 		return this.illegal;
 	}
 
-	public long getAveragePrice() {
+	public int getAveragePrice() {
 		return this.averagePrice;
 	}
 
+	/**
+	 * This is the price the station will pay for the ware you are looking to sell to.
+	 * @param sellingPrice
+	 */
 	public void setSellingPrice(int sellingPrice) {
 		this.sellingPrice = sellingPrice;
 	}
 
-	public long getSellingPrice() {
+	/**
+	 * This is the price the station will pay for the ware you are looking to sell to.
+	 * @param sellingPrice
+	 */
+	public int getSellingPrice() {
 		return this.sellingPrice;
 	}
 
+	/**
+	 * This is the price the station will pay for the ware you are looking to buy from.
+	 * @param buyingPrice
+	 */
 	public void setBuyingPrice(int buyingPrice) {
 		this.buyingPrice = buyingPrice;
 	}
 
-	public long getBuyingPrice() {
+	/**
+	 * This is the price the station will pay for the ware you are looking to buy from.
+	 * @param buyingPrice
+	 */
+	public int getBuyingPrice() {
 		return this.buyingPrice;
 	}
 
@@ -168,5 +187,19 @@ public class BaseCommodity implements Commodity {
 		toReturn.setRare(new Boolean(node.getAttributeValue("rare")));
 
 		return toReturn;
+	}
+
+	public void setSupply(int supplyValue) {
+		this.supply= supplyValue;		
+	}
+	public int getSupply() {
+		return this.supply;
+	}
+
+	public void setDemand(int demandValue) {
+		this.demand = demandValue;
+	}
+	public int getDemand() {
+		return this.demand;
 	}
 }

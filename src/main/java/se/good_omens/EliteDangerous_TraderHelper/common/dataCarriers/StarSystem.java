@@ -1,6 +1,8 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.ALLEGIANCE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.ECONOMY_TYPE;
@@ -27,6 +29,7 @@ public class StarSystem {
 	private boolean					needsPermit			= false;
 	private Date						updatedAt				= new Date(0L);
 	private String					simbadRef				= "";
+	private List<Station>		stations				= new ArrayList<>();
 
 	/*
 	 * ,"power_state":null
@@ -146,5 +149,20 @@ public class StarSystem {
 
 	public Position getPosition() {
 		return position;
+	}
+
+	public List<Station> getStations() {
+		return stations;
+	}
+
+	public void setStations(List<Station> stations) {
+		this.stations = stations;
+	}
+	
+	public void addStation(Station station) {
+		if(stations == null) {
+			stations = new ArrayList<>();
+		}
+		stations.add(station);
 	}
 }

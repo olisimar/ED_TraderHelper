@@ -2,11 +2,11 @@ package se.good_omens.EliteDangerous_TraderHelper.common.enums;
 
 public enum SHIP_SIZE {
 
-	  NONE("none")
-	, UNKNOWN("unknown")
-	, SMALL("S")
+	  SMALL("S")
 	,	MEDIUM("M")
 	,	LARGE("L")
+  , NONE("none")
+  , UNKNOWN("unknown")
 	;
 
 
@@ -30,5 +30,15 @@ public enum SHIP_SIZE {
 			}
 		}
 		return SHIP_SIZE.UNKNOWN;
+	}
+	
+	/**
+	 * Returns true if the padSize passed in is smaller or equal to this.
+	 * Use: station.getMaxLandingPadSize().sizeAppropiate(ship.getShipSize())
+	 * @param padSize
+	 * @return
+	 */
+	public boolean sizeAppropiate(SHIP_SIZE padSize) {
+		return (padSize.ordinal() <= this.ordinal());
 	}
 }

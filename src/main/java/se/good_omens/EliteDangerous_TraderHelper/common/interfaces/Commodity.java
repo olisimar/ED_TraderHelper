@@ -18,7 +18,7 @@ public interface Commodity extends XmlEntity {
 	public Boolean isIllegal();
 	public Boolean isRare();
 
-	public long getAveragePrice();
-	public long getSellingPrice();
-	public long getBuyingPrice();
+	public int getAveragePrice();
+	public int getSellingPrice();
+	public int getBuyingPrice();
 }
