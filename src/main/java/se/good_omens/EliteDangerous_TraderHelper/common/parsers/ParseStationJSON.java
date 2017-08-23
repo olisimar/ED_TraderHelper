@@ -133,6 +133,9 @@ public class ParseStationJSON {
 				if (data.get("has_rearm") != null) {
 					current.setHasReArm(new Boolean(data.get("has_rearm").toString()));
 				}
+				if(data.get("is_planetary") != null) {
+					current.setPlanetary(Boolean.parseBoolean(data.get("is_planetary").toString()));
+				}
 				if ((data.get("economies") != null) && (data.get("economies") instanceof JSONArray)) {
 					JSONArray economies = (JSONArray) data.get("economies");
 					Iterator<?> iter = economies.iterator();

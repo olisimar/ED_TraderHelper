@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
+/**
+ * Constructs a matrix of possible trades.
+ * @author TuX
+ *
+ */
 public class TradeCalculator implements Runnable {
 	
 	private final UserData userData;
@@ -15,6 +20,10 @@ public class TradeCalculator implements Runnable {
 
 	public TradeCalculator(UserData userData) {
 		this(userData, userData.getCurrentStation(), new ArrayList<>(userData.getCurrentBubble().values()));
+	}
+	
+	public TradeCalculator(UserData userData, Station currentStation) {
+		this(userData, currentStation, new ArrayList<>(userData.getCurrentBubble().values()));
 	}
 	
 	public TradeCalculator(UserData userData, Station currentStation, List<StarSystem> usedBubble) {
@@ -32,29 +41,27 @@ public class TradeCalculator implements Runnable {
 			usedBubble = (List<StarSystem>) userData.getCurrentBubble().values();
 		}
 		
-		int totalStationCount = 0;
 		for(StarSystem system : usedBubble) {
 			for(Station station : system.getStations()) {
-				totalStationCount++;
 				if(isStationValidForTrade(station)) {
 					tmp.add(station);
 				}
 			}
 		}
-		System.out.println(totalStationCount +" total amount of stations.");
 		this.stationsWithinBubble = tmp;
 	}
 	
 	private boolean isStationValidForTrade(Station station) {
-		System.out.print(" Evaluating station for inclusion: "+ station.getBaseName() +" > ");
 		if(station.getBoughtCommodities().isEmpty()) {
 			return false;
 		}
 		if(!station.getMaxLandingPadSize().sizeAppropiate(userData.getShipType().getSize())) {
 			return false;
 		}
-		if(!userData.isPlanetaryLanding() && station.isPlanetary()) {
-			return false;
+		if(!userData.isPlanetaryLanding()) {
+			if(station.isPlanetary()) {
+				return false;
+			}
 		}
 		return true;
 	}
@@ -64,21 +71,26 @@ public class TradeCalculator implements Runnable {
 		this.tradeResults = new TreeSet<>();
 		noCalculatedStations = 0;
 		for(Station evalStation: this.stationsWithinBubble) {
-			for(TradeResult result : this.findPossibleTrades(this.currentStation, evalStation)) {
-				if(result.getExpectedProfit() > 0) {
-					tradeResults.add(result);
-				}				
+			noCalculatedStations++;
+			for(Station compStation : this.stationsWithinBubble) {
+				for(TradeResult result : this.findPossibleTrades(evalStation, compStation)) {
+					if(result.getExpectedProfit() > 0) {
+						tradeResults.add(result);
+					}				
+				}
 			}
 		}
 	}
 	
 	public List<TradeResult> findPossibleTrades(Station curStation, Station evalStation) {
 		List<TradeResult> toReturn = new ArrayList<>();
-		for(BaseCommodity comm : curStation.getSoldCommodities()) {
-			for(BaseCommodity evalComm : evalStation.getBoughtCommodities()) {
-				if(comm.getCommodity() == evalComm.getCommodity()) {
-					int expectedProfit = (int) (calculateMaxBuyingAmount(comm) * (evalComm.getSellingPrice() - comm.getBuyingPrice()));
-					toReturn.add(new TradeResult(comm, curStation, evalStation, expectedProfit));
+		if(curStation != null & evalStation != null) {
+			for(BaseCommodity comm : curStation.getSoldCommodities()) {
+				for(BaseCommodity evalComm : evalStation.getBoughtCommodities()) {
+					if(comm.getCommodity() == evalComm.getCommodity()) {
+						int expectedProfit = (int) (calculateMaxBuyingAmount(comm) * (evalComm.getSellingPrice() - comm.getBuyingPrice()));
+						toReturn.add(new TradeResult(comm, curStation, evalStation, expectedProfit));
+					}
 				}
 			}
 		}
@@ -193,7 +205,17 @@ public class TradeCalculator implements Runnable {
 			if(distance.length() > 5) {
 				distance = distance.substring(0, 5);
 			}
-			return commodity.getName() +" : {"+ fromSystem.getName()+"}"+ fromStation.getBaseName() +" -> {"+ toSystem.getName()+"}"+ toStation.getBaseName() +" [Profit: "+ expectedProfit +" | "+ distance +" {jumps:"+ getJumps() +"}]"; 
+			String planetary = " (S) ";
+			if(toStation.isPlanetary()) {
+				planetary = " (P) ";
+			}
+			int buyPrice = 0;
+			for(BaseCommodity comm : toStation.getBoughtCommodities()) {
+				if(comm.getCommodity() == commodity.getCommodity()) {
+					buyPrice = comm.getSellingPrice();
+				}
+			}
+			return commodity.getName() +"["+commodity.getBuyingPrice()+"|"+buyPrice+"] : {"+ fromSystem.getName()+"} "+ fromStation.getBaseName() +" -> {"+ toSystem.getName()+"} "+ toStation.getBaseName() + planetary +" [Profit: "+ expectedProfit +" | "+ distance +" {jumps:"+ getJumps() +"}]"; 
 		}
 	}	
 }
