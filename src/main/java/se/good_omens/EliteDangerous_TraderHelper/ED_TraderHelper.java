@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import se.good_omens.EliteDangerous_TraderHelper.common.exceptions.FileMissingException;
-import se.good_omens.EliteDangerous_TraderHelper.common.utils.FileReader;
+import se.good_omens.EliteDangerous_TraderHelper.common.utils.FileHandler;
 import se.good_omens.EliteDangerous_TraderHelper.common.utils.SystemData;
 
 public class ED_TraderHelper {
@@ -23,7 +23,7 @@ public class ED_TraderHelper {
 	private static Map<String, String> getProperties(SystemData sysData) {
 		Map<String, String> properties = new HashMap<>();
 		try {
-			String data = FileReader.readFile(sysData.getWorkingDirectory(), "tradehelper.ini");
+			String data = FileHandler.readFile(sysData.getWorkingDirectory(), "tradehelper.ini");
 			for(String item : data.split("\\n")) {
 				String[] items = item.split(":");
 				properties.put(items[0], items[1]);

@@ -2,6 +2,7 @@ package se.good_omens.EliteDangerous_TraderHelper.common.utils;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -32,5 +33,9 @@ public class SystemData {
 
 	public int getScreenHeight() {
 		return this.screenHeight;
+	}
+	
+	public String getDirectoryDelimiter() {
+		return File.separator;
 	}
 }
