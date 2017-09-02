@@ -33,7 +33,7 @@ public class FileHandler {
 	public static boolean writeFile(String correctPathAndFileName, String data) {
 		Path toFile = Paths.get(correctPathAndFileName);
 		if (Files.isWritable(toFile)) {
-			try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(toFile, CREATE, APPEND))) {
+			try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(toFile, CREATE, TRUNCATE_EXISTING))) {
 				out.write(data.getBytes(), 0, data.getBytes().length);
 				out.flush();
 				out.close();

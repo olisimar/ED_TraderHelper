@@ -16,7 +16,12 @@ public class ED_TraderHelper {
 		System.out.println(sysData.getScreenWidth());
 		System.out.println(sysData.getScreenHeight());
 		Map<String,String> properties = getProperties(sysData);
-		System.out.println(properties);
+		
+		System.out.println(" ---");
+		for(Entry<String, String> prop : properties.entrySet()) {
+			System.out.println(prop.getKey() +":"+ prop.getValue());
+		}
+		System.out.println(" ---");
 		
 		saveProperties(properties, sysData);
 	}
@@ -41,7 +46,7 @@ public class ED_TraderHelper {
 		String correctPathAndFileName = sysData.getWorkingDirectory() + sysData.getDirectoryDelimiter() + "tradehelper.ini";
 		
 		for(Entry<String, String> prop : properties.entrySet()) {
-			data = data + prop.getKey() +":"+ prop.getValue() + "\\n";
+			data = data + prop.getKey().trim() +":"+ prop.getValue().trim() + System.getProperty("line.separator");
 		}
 		
 		FileHandler.writeFile(correctPathAndFileName, data);
