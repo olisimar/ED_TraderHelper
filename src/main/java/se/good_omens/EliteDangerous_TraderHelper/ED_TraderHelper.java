@@ -2,6 +2,7 @@ package se.good_omens.EliteDangerous_TraderHelper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import se.good_omens.EliteDangerous_TraderHelper.common.exceptions.FileMissingException;
 import se.good_omens.EliteDangerous_TraderHelper.common.utils.FileHandler;
@@ -36,5 +37,13 @@ public class ED_TraderHelper {
 	}
 
 	private static void saveProperties(Map<String, String> properties, SystemData sysData) {
+		String data = "";
+		String correctPathAndFileName = sysData.getWorkingDirectory() + sysData.getDirectoryDelimiter() + "tradehelper.ini";
+		
+		for(Entry<String, String> prop : properties.entrySet()) {
+			data = data + prop.getKey() +":"+ prop.getValue() + "\\n";
+		}
+		
+		FileHandler.writeFile(correctPathAndFileName, data);
 	}
 }
