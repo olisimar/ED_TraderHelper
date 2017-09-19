@@ -37,7 +37,7 @@ public class FileHandler {
 				out.write(data.getBytes(), 0, data.getBytes().length);
 				out.flush();
 				out.close();
-				System.out.println("[File written]");
+				System.out.println("[File written: "+ correctPathAndFileName +"]");
 				return true;
 			} catch (IOException e) {
 				System.err.println(e);

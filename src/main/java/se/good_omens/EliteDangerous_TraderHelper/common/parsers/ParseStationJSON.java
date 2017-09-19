@@ -17,7 +17,7 @@ import se.good_omens.EliteDangerous_TraderHelper.common.enums.GOVERMENT_TYPE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.SHIP_SIZE;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.SHIP_TYPE;
 
-public class ParseStationJSON {
+public class ParseStationJSON implements Runnable {
 
 /*
 {"id":5,"name":"Reilly Hub","system_id":396,"updated_at":1501117497,"max_landing_pad_size":"L","distance_to_star":171,"government_id":64,"government":"Corporate"
@@ -58,11 +58,18 @@ public class ParseStationJSON {
 	private final String											orginalData;
 	private final TreeMap<Long, Station>			stations			= new TreeMap<Long, Station>();
 	private final ParseModules 								parserModules;
+	private volatile int parsedStations = 0;
+	private volatile int totalStations = 0;
 
 	public ParseStationJSON(String data, ParseModules parserModules) {
 		this.parserModules = parserModules;
 		parserModules.parseModules();
 		this.orginalData = data;
+	}
+	
+	@Override
+	public void run() {
+		this.parseStationJSON();
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -74,9 +81,11 @@ public class ParseStationJSON {
 
 			} else if (data.getClass() == JSONArray.class) {
 				Iterator iter = ((JSONArray) data).iterator();
+				this.totalStations = ((JSONArray) data).size();
 				while (iter.hasNext()) {
 					Station current = this.parseSingleStationJSON(iter.next());
 					stations.put(current.getId(), current);
+					this.parsedStations++;					
 				}
 			}
 		} catch (ParseException e) {
@@ -191,4 +200,13 @@ public class ParseStationJSON {
 	public TreeMap<Long, Station> getStations() {
 		return this.stations;
 	}
+
+	public int getTotalStations() {
+		return totalStations;
+	}
+
+	public int getParsedStations() {
+		return parsedStations;
+	}
+
 }

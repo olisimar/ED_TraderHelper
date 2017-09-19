@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import se.good_omens.EliteDangerous_TraderHelper.GUI.BaseWindowLoader;
 import se.good_omens.EliteDangerous_TraderHelper.common.exceptions.FileMissingException;
 import se.good_omens.EliteDangerous_TraderHelper.common.utils.FileHandler;
+import se.good_omens.EliteDangerous_TraderHelper.common.utils.RuntimeProperties;
 import se.good_omens.EliteDangerous_TraderHelper.common.utils.SystemData;
 
 public class ED_TraderHelper {
@@ -23,7 +25,14 @@ public class ED_TraderHelper {
 		}
 		System.out.println(" ---");
 		
-		saveProperties(properties, sysData);
+		try {
+			DataStore dataStore = new DataStore();
+			BaseWindowLoader loader = new BaseWindowLoader(RuntimeProperties.of(properties));
+			loader.begin();
+		}		
+		finally {
+			saveProperties(properties, sysData);
+		}
 	}
 
 	private static Map<String, String> getProperties(SystemData sysData) {
