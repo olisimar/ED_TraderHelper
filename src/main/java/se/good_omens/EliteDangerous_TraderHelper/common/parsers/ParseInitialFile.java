@@ -12,17 +12,21 @@ public class ParseInitialFile {
 	
 	public ParseInitialFile(String originalData) {
 		this.originalData = originalData;
-		this.props = RuntimeProperties.of(this.getOriginalDataMap());
+		this.props = RuntimeProperties.of(this.parseOriginalDataToMap());
 	}
 	
-	private Map<String, String> getOriginalDataMap() {
+	private Map<String, String> parseOriginalDataToMap() {
 		TreeMap<String, String> props = new TreeMap<>();
 		String[] data = this.originalData.split("\n");
 		for(String item : data) {
+			item = item.trim();
+			if(item.contains("\n") | item.contains("\r")) {
+				throw new RuntimeException("Found BAD init file data. Please correct: "+ item);
+			}
 			if(item != null && !item.isEmpty()) {
 				String[] keyValue = item.split(":");
 				if(keyValue.length == 2) {
-					props.put(keyValue[0], keyValue[1]);
+					props.put(keyValue[0].trim(), keyValue[1].trim());
 				}
 			}
 		}

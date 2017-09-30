@@ -20,7 +20,7 @@ public class RuntimeProperties {
 	private RuntimeProperties(Map<String, String> properties) {
 		this.properties = new HashMap<String, String>();
 		for(Entry<String,String> item : properties.entrySet()) {
-			this.properties.put( new String(item.getKey()), new String(item.getValue()) );
+			this.properties.put( new String(item.getKey().trim()), new String(item.getValue().trim()) );
 		}
 	}
 
@@ -35,7 +35,7 @@ public class RuntimeProperties {
 		if(this.properties.containsKey(key)) {
 			throw new IllegalArgumentException("Key already present in RuntimeProperties. Key in question: "+ key);
 		}
-		this.properties.put(key, value);
+		this.properties.put(key.trim(), value.trim());
 	}
 	
 	public void removeEntry(String key) {

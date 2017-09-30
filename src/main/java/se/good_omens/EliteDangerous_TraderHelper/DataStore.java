@@ -1,13 +1,11 @@
 package se.good_omens.EliteDangerous_TraderHelper;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.util.Map.Entry;
-import java.util.Observer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Observer;
 import java.util.TreeMap;
 
 import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.StarSystem;

@@ -1,14 +1,12 @@
 package se.good_omens.EliteDangerous_TraderHelper.tests;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.reporters.Files;
 
 import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.Position;
+import se.good_omens.EliteDangerous_TraderHelper.common.exceptions.FileMissingException;
 import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseInitialFile;
+import se.good_omens.EliteDangerous_TraderHelper.common.utils.FileHandler;
 import se.good_omens.EliteDangerous_TraderHelper.common.utils.RuntimeProperties;
 import se.good_omens.EliteDangerous_TraderHelper.common.utils.SystemData;
 
@@ -23,11 +21,14 @@ public class testBasicFunctionalities {
 	@Test
 	public void testInitialLoadOfVariables() {
 		try {
-			RuntimeProperties props = new ParseInitialFile(Files.readFile(new File(systemData.getWorkingDirectory() + "\\tradehelper.ini"))).getRuntimeProperties();
+			RuntimeProperties props = new ParseInitialFile(FileHandler.readFile(systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter(), "tradehelper.ini")).getRuntimeProperties();
+			
+			System.out.println(" +------------+");
 			for(String item : props.listKeys()) {
 				System.out.println(item +" : "+ props.getEntry(item));
 			}
-		} catch (IOException e) {
+		} catch (FileMissingException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

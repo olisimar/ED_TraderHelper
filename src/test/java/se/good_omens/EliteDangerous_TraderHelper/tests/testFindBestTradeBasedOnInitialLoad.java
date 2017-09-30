@@ -1,57 +1,52 @@
 package se.good_omens.EliteDangerous_TraderHelper.tests;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.reporters.Files;
 
-import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.BaseCommodity;
 import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.StarSystem;
 import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.Station;
 import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.TradeCalculator;
-import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.UserData;
 import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.TradeCalculator.TradeResult;
+import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.UserData;
+import se.good_omens.EliteDangerous_TraderHelper.common.exceptions.FileMissingException;
 import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseInitialFile;
 import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseListings;
 import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseModules;
 import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseStationJSON;
 import se.good_omens.EliteDangerous_TraderHelper.common.parsers.ParseSystemJSON;
+import se.good_omens.EliteDangerous_TraderHelper.common.utils.FileHandler;
 import se.good_omens.EliteDangerous_TraderHelper.common.utils.RuntimeProperties;
 import se.good_omens.EliteDangerous_TraderHelper.common.utils.SystemData;
 
 public class testFindBestTradeBasedOnInitialLoad {
-	public static String			protocol		= "file:///";
-	public static String			filePath		= "C:/Users/TuX/workspace/ED_TraderHelper/rawData/";
 	private static SystemData	systemData	= new SystemData();
 
 	@Test
 	public void verifyDataIsAvailable() {
 		try {
-			System.out.println("Loading files...");
-			ParseModules mParser = new ParseModules(
-			    Files.readFile(new File(systemData.getWorkingDirectory() + "\\rawData\\modules.json")));
-			ParseStationJSON sParser = new ParseStationJSON(
-			    Files.readFile(new File(systemData.getWorkingDirectory() + "\\rawData\\stations.json")), mParser);
-			ParseSystemJSON sysParser = new ParseSystemJSON(
-			    Files.readFile(new File(systemData.getWorkingDirectory() + "\\rawData\\systems_populated.json")));
-			System.out.println("Parsing files...");
+			long startTime = System.currentTimeMillis();
+			System.out.print("Loading of files: ");
+			ParseModules mParser = new ParseModules(FileHandler.readFile(systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter() + "rawData"+ systemData.getDirectoryDelimiter(), "modules.json"));
+			ParseStationJSON sParser = new ParseStationJSON(FileHandler.readFile(systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter() + "rawData"+ systemData.getDirectoryDelimiter(), "stations.json"), mParser);
+			ParseSystemJSON sysParser = new ParseSystemJSON(FileHandler.readFile(systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter() + "rawData"+ systemData.getDirectoryDelimiter(), "systems_populated.json"));
+			System.out.println((System.currentTimeMillis() - startTime) +"ms");
+			System.out.print("Parsing of files: ");
 			sParser.parseStationJSON();
 			sysParser.parseSystemJSON();
 			TreeMap<Long, Station> stations = sParser.getStations();
-			stations = new ParseListings().parseListings(
-			    Files.readFile(new File(systemData.getWorkingDirectory() + "\\rawData\\listings.csv")), stations);
+			System.out.println((System.currentTimeMillis() - startTime) +"ms");
+			
+			System.out.print("Listings loaded onto stations: ");
+			stations = new ParseListings().parseListings(FileHandler.readFile(systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter() + "rawData"+ systemData.getDirectoryDelimiter(), "listings.csv"), stations);
+			System.out.println((System.currentTimeMillis() - startTime) +"ms");
+			
 			TreeMap<Long, StarSystem> systems = sysParser.getSystems();
 
-			System.out.println("Loading systems onto their systems");
+			System.out.print("Loading stations onto their systems: ");
 			long numStations = 0l;
 			long numFailedLoads = 0l;
 			for (Entry<Long, Station> item : stations.entrySet()) {
@@ -66,49 +61,33 @@ public class testFindBestTradeBasedOnInitialLoad {
 				}
 			}
 			System.out.println(numStations + " in total, failed to find system in " + numFailedLoads);
+			System.out.println((System.currentTimeMillis() - startTime) +"ms");
 			System.out.println("Systems, stations, modules and listings loaded...");
 
-			RuntimeProperties props = new ParseInitialFile(
-			    Files.readFile(new File(systemData.getWorkingDirectory() + "\\tradehelper.ini"))).getRuntimeProperties();
+			RuntimeProperties props = new ParseInitialFile(FileHandler.readFile(systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter(), "tradehelper.ini")).getRuntimeProperties();
 			System.out.println("\nInitial properties:");
 			for (String key : props.listKeys()) {
 				System.out.println(key + " - " + props.getEntry(key));
 			}
-			System.out.println("\t");
+			System.out.println("Total loadtime is: "+ (System.currentTimeMillis() - startTime) +"ns or "+ ((System.currentTimeMillis() - startTime)/1000) +"s" );
+			System.out.println("   ---------");
 
 			UserData userData = new UserData(props, systems);
 
 			Assert.assertNotEquals(systems.size(), userData.getCurrentBubble().size());
 
-			/*
-			 * for( Entry<Long, StarSystem> item :
-			 * userData.getCurrentBubble().entrySet()) {
-			 * System.out.println(item.getKey() +" : "+ item.getValue().getName()
-			 * +" [No# Stations: "+ item.getValue().getStations().size()+
-			 * "] with the distance of "+
-			 * userData.getCurrentSystem().getPosition().distanceTo(item.getValue().
-			 * getPosition()) ); }
-			 * 
-			 * for( BaseCommodity item:
-			 * userData.getCurrentStation().getExportCommodities()) {
-			 * System.out.println(item.getName() +" : B:"+ item.getBuyingPrice()
-			 * +"\tS:"+ item.getSellingPrice()); }
-			 * System.out.println("  Sold items:"); for( BaseCommodity item :
-			 * userData.getCurrentStation().getSoldCommodities()) {
-			 * System.out.println(item.getName() +" :  B:"+ item.getBuyingPrice()
-			 * +" S:"+ item.getSellingPrice()); }
-			 * System.out.println("\n  Bought items:"); for( BaseCommodity item :
-			 * userData.getCurrentStation().getBoughtCommodities()) {
-			 * System.out.println(item.getName() + " :  B:"+ item.getBuyingPrice()
-			 * +"  S:"+ item.getSellingPrice()); }
-			 */
 			System.out.println(userData.getCurrentBubble().size() + " in the current bubble.");
 
-			System.out.println("TradeCalculation is has started.");
+			System.out.println("TradeCalculation has started.");
 			TradeCalculator calc = new TradeCalculator(userData);
-			calc.run();
-			System.out.println(calc.getTotalNumberOfStationsLookedAt() + " stations looked at for trade.");
-			System.out.println(calc.getPossibleTrades().size() + " possible trades.");
+			long calcTime = System.currentTimeMillis();
+			Thread calcThread = new Thread(calc);
+			calcThread.run();
+
+			
+			System.out.println("Calculation took: "+ (System.currentTimeMillis() - calcTime) +"ms or "+ ((System.currentTimeMillis() - calcTime) / 1000) +"s" );
+			System.out.println(calc.getTotalNumberOfStationsLookedAt() + " stations looked at for trade. "+ calc.getPossibleTrades().size() + " possible trades.");
+			
 
 			int counter = 1;
 			/**/
@@ -145,10 +124,7 @@ public class testFindBestTradeBasedOnInitialLoad {
 				counter++;
 			}
 			/**/
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (FileMissingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

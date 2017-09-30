@@ -22,11 +22,11 @@ public class UserData {
 	private int										maxCargoHold			= 0;
 
 	public UserData(RuntimeProperties properties, Map<Long, StarSystem> galaxy) {
+		this.properties = properties;
 		this.galaxy = galaxy;
-		this.currentSystem = galaxy.get(new Long(properties.getEntry("system")).longValue());
+		this.currentSystem = galaxy.get(new Long(properties.getEntry("system").trim()).longValue());
 		this.loadedJumpRange = new Double(properties.getEntry("jumpRangeLoaded")).doubleValue();
 		this.maxJumps = new Integer(properties.getEntry("maxJumps")).intValue();
-		this.currentSystem = galaxy.get(new Long(properties.getEntry("system")).longValue());
 		this.planetaryLanding = (Boolean.parseBoolean(properties.getEntry("planetaryLanding")));
 		this.shipType = SHIP_TYPE.fromString(properties.getEntry("shipType"));
 		this.maxCargoHold = Integer.parseInt(properties.getEntry("cargoHoldSize"));
@@ -73,7 +73,6 @@ public class UserData {
 				}
 				currentBubble.putAll(inProgress);
 			}
-			System.out.println("Second run has been completed, bubble now has " + currentBubble.size());
 		}
 	}
 

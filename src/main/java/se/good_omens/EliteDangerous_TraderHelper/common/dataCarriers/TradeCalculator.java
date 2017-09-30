@@ -9,10 +9,9 @@ import java.util.TreeSet;
  * @author TuX
  *
  */
-public class TradeCalculator implements Runnable {
+public class TradeCalculator extends Thread implements Runnable {
 	
 	private final UserData userData;
-	private final Station currentStation;
 	private final List<StarSystem> reviewedSystems;
 	private final List<Station> stationsWithinBubble;
 	private volatile int noCalculatedStations = 0;
@@ -30,12 +29,6 @@ public class TradeCalculator implements Runnable {
 		this.userData = userData;
 		this.reviewedSystems = usedBubble;
 		ArrayList<Station> tmp = new ArrayList<>();
-		
-		if(currentStation == null) {
-			this.currentStation = userData.getCurrentStation();
-		} else {
-			this.currentStation = currentStation;
-		}
 		
 		if(usedBubble == null) {
 			usedBubble = (List<StarSystem>) userData.getCurrentBubble().values();
@@ -65,12 +58,15 @@ public class TradeCalculator implements Runnable {
 		}
 		return true;
 	}
-
+	
 	@Override
 	public void run() {
 		this.tradeResults = new TreeSet<>();
 		noCalculatedStations = 0;
 		for(Station evalStation: this.stationsWithinBubble) {
+			if(this.isInterrupted()) {
+				break;
+			}
 			noCalculatedStations++;
 			for(Station compStation : this.stationsWithinBubble) {
 				for(TradeResult result : this.findPossibleTrades(evalStation, compStation)) {
@@ -108,7 +104,7 @@ public class TradeCalculator implements Runnable {
 		return maxBuy;
 	}
 	
-	public int noCalculatedStations() {
+	public int getNumberCalculatedStations() {
 		return this.noCalculatedStations;
 	}
 	
@@ -121,7 +117,7 @@ public class TradeCalculator implements Runnable {
 	}
 	
 	
-	/**
+	/*********************************************************************
 	 * Compares only on expectedProfits for easy ordering of TradeResults.
 	 * @author TuX
 	 *
