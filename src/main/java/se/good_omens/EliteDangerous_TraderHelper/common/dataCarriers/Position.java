@@ -39,4 +39,8 @@ public class Position {
 		
 		return Math.sqrt(relX + relY + relZ);
 	}
+	
+	public String toString() {
+		return "["+ this.x +"|"+ this.y +"|"+ this.z +"]";
+	}
 }

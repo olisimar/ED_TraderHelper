@@ -44,12 +44,12 @@ public class DataStore implements Observable {
 			String rawDataPath = systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter() +"rawData"+ systemData.getDirectoryDelimiter();
 			this.runtimeProperties = RuntimeProperties.of(this.getProperties(systemData));
 			
-			modulesParser = new ParseModules(FileHandler.readFile(rawDataPath +"modules.json"));
-			stationsParser = new ParseStationJSON(FileHandler.readFile(rawDataPath +"stations.json"), modulesParser);
-			systemsParser = new ParseSystemJSON(FileHandler.readFile(rawDataPath +"systems_populated.json"));
+			modulesParser = new ParseModules(FileHandler.readFile(rawDataPath, "modules.json"));
+			stationsParser = new ParseStationJSON(FileHandler.readFile(rawDataPath, "stations.json"), modulesParser);
+			systemsParser = new ParseSystemJSON(FileHandler.readFile(rawDataPath, "systems_populated.json"));
 			stationsParser.parseStationJSON();
 			systemsParser.parseSystemJSON();
-			TreeMap<Long, Station> stations = new ParseListings().parseListings(FileHandler.readFile(rawDataPath +"listings.csv"), stationsParser.getStations());
+			TreeMap<Long, Station> stations = new ParseListings().parseListings(FileHandler.readFile(rawDataPath, "listings.csv"), stationsParser.getStations());
 			TreeMap<Long, StarSystem> systems = systemsParser.getSystems();
 
 			for (Entry<Long, Station> item : stations.entrySet()) {
@@ -59,9 +59,9 @@ public class DataStore implements Observable {
 				}
 			}
 			
-			RuntimeProperties props = new ParseInitialFile(FileHandler.readFile(systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter() +"tradehelper.ini")).getRuntimeProperties();
+			RuntimeProperties props = new ParseInitialFile(FileHandler.readFile(systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter(), "tradehelper.ini")).getRuntimeProperties();
 			userData = new UserData(props, systems);
-		} catch (IOException | URISyntaxException e) {
+		} catch (FileMissingException e) {
 			e.printStackTrace();
 		}
 	}

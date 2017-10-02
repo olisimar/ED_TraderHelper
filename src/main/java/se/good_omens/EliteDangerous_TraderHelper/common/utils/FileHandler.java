@@ -14,10 +14,20 @@ import se.good_omens.EliteDangerous_TraderHelper.common.exceptions.FileMissingEx
 
 public class FileHandler {
 
+	/**
+	 * Bad, worse, this. Use only for online resources. Do NOT use for local files.
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
 	public static String readFile(String file) throws IOException, URISyntaxException {
 		return FileHandler.readFile(new URI(file));
 	}
 
+	/**
+	 * Bad, worse, this. Use only for online resources. Do NOT use for local files.
+	 */
 	public static String readFile(URI file) throws IOException {
 		return new String(Files.readAllBytes(Paths.get(file)));
 	}

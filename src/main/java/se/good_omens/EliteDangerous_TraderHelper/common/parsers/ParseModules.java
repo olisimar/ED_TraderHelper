@@ -18,7 +18,7 @@ public class ParseModules {
 	private TreeMap<Integer, ShipModule> shipModules = new TreeMap<>();
 
 	public ParseModules(String originalData) {
-		this.orginalData = originalData;
+		this.orginalData = originalData.trim();
 	}
 	
 	@SuppressWarnings("unchecked")

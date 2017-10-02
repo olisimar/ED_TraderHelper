@@ -1,26 +1,41 @@
 package se.good_omens.EliteDangerous_TraderHelper.GUI;
 
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
+import se.good_omens.EliteDangerous_TraderHelper.DataStore;
+import se.good_omens.EliteDangerous_TraderHelper.GUI.HelperClasses.StarSystemSelectorItem;
 import se.good_omens.EliteDangerous_TraderHelper.common.utils.RuntimeProperties;
 
-public class PersonalInfoPanel extends JPanel {
+public class PersonalInfoPanel extends JPanel implements PropertyChangeListener {
 
 	private static final long serialVersionUID = 1L;
-	private volatile RuntimeProperties props;
+	private volatile DataStore dataStore;
+	private SystemJComboBox<StarSystemSelectorItem> systemSelector;
 
-	public PersonalInfoPanel(RuntimeProperties props) {
-		this.props = props;
+	public PersonalInfoPanel(DataStore dataStore) {
+		this.dataStore = dataStore;
 		this.setBorder(new BevelBorder(BevelBorder.RAISED));
 		this.setSize(new Dimension(100, 200));
-		this.add(new JButton("Press Me"));
+		ArrayList<StarSystemSelectorItem> items = StarSystemSelectorItem.of(dataStore.getSystemParser().getSystems());
+		this.systemSelector = new SystemJComboBox<StarSystemSelectorItem>(items, new StarSystemSelectorItem(dataStore.getUserData().getCurrentSystem()));
+		this.add(systemSelector);
+		systemSelector.addPropertyChangeListener("StarSystemSelected", this);
 	}
 	
 	public RuntimeProperties getProperties() {
-		return this.props;
+		return this.dataStore.getRuntimeProperties();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent arg0) {
+		if(arg0.getNewValue() instanceof StarSystemSelectorItem) {
+			StarSystemSelectorItem system = (StarSystemSelectorItem)arg0.getNewValue();
+		}
 	}
 }

@@ -62,9 +62,9 @@ public class ParseStationJSON implements Runnable {
 	private volatile int totalStations = 0;
 
 	public ParseStationJSON(String data, ParseModules parserModules) {
+		this.orginalData = data.trim();
 		this.parserModules = parserModules;
 		parserModules.parseModules();
-		this.orginalData = data;
 	}
 	
 	@Override

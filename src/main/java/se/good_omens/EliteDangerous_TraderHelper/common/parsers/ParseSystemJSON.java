@@ -26,7 +26,7 @@ public class ParseSystemJSON {
 
 
 	public ParseSystemJSON(String data) {
-		this.originalData = data;
+		this.originalData = data.trim();
 	}
 	
 	public TreeMap<Long, StarSystem> getSystems() {

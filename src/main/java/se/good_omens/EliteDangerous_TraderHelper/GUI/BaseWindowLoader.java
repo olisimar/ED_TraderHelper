@@ -1,5 +1,10 @@
 package se.good_omens.EliteDangerous_TraderHelper.GUI;
 
+import java.util.TreeMap;
+
+import se.good_omens.EliteDangerous_TraderHelper.DataStore;
+import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.StarSystem;
+import se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers.UserData;
 import se.good_omens.EliteDangerous_TraderHelper.common.utils.RuntimeProperties;
 
 /**
@@ -9,14 +14,14 @@ import se.good_omens.EliteDangerous_TraderHelper.common.utils.RuntimeProperties;
  */
 public class BaseWindowLoader {
 
-	private final RuntimeProperties properties;
+	private final DataStore dataStore;
 
-	public BaseWindowLoader(RuntimeProperties properties) {
-		this.properties = properties;
+	public BaseWindowLoader(DataStore dataStore) {
+		this.dataStore = dataStore;
 	}
 	
 	public void begin() {
-		PersonalInfoFrame frame = new PersonalInfoFrame(properties);
+		PersonalInfoFrame frame = new PersonalInfoFrame(dataStore);
 		
 		
 	}

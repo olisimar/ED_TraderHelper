@@ -27,7 +27,8 @@ public class ED_TraderHelper {
 		
 		try {
 			DataStore dataStore = new DataStore();
-			BaseWindowLoader loader = new BaseWindowLoader(RuntimeProperties.of(properties));
+			dataStore.loadFiles();
+			BaseWindowLoader loader = new BaseWindowLoader(dataStore);
 			loader.begin();
 		}		
 		finally {
