@@ -136,4 +136,9 @@ public class UserData {
 	public void setMaxCargoHold(int maxCargoHold) {
 		this.maxCargoHold = maxCargoHold;
 	}
+
+	public void setCurrentSystem(StarSystem system) {
+		this.currentSystem = system;
+		calculateCurrentBubble();
+	}
 }

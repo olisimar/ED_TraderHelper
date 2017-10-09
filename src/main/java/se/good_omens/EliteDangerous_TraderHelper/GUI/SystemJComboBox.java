@@ -18,6 +18,9 @@ public class SystemJComboBox<StarSystemSelectorItem> extends JComboBox<StarSyste
 		this.setPreferredSize(new Dimension(250, 30));
 
 		for (StarSystemSelectorItem entry : items) {
+			if(entry.toString().equalsIgnoreCase(selected.toString())) {
+				this.setSelectedItem(entry);
+			}
 			this.addItem(entry);
 		}
 
@@ -25,7 +28,7 @@ public class SystemJComboBox<StarSystemSelectorItem> extends JComboBox<StarSyste
 		this.setEnabled(true);
 		this.setEditable(true);
 		this.addActionListener(this);
-
+		this.setSelectedItem(selected);
 	}
 
 	@SuppressWarnings("unchecked")

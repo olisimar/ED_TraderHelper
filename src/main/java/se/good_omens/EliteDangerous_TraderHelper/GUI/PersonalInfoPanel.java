@@ -35,7 +35,10 @@ public class PersonalInfoPanel extends JPanel implements PropertyChangeListener 
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
 		if(arg0.getNewValue() instanceof StarSystemSelectorItem) {
-			StarSystemSelectorItem system = (StarSystemSelectorItem)arg0.getNewValue();
+			StarSystemSelectorItem newSystem = (StarSystemSelectorItem)arg0.getNewValue();
+			StarSystemSelectorItem oldSystem = (StarSystemSelectorItem)arg0.getOldValue();
+			System.out.println("New> "+ newSystem +" || Old> "+ oldSystem);
+			dataStore.getUserData().setCurrentSystem(newSystem.getSystem());
 		}
 	}
 }
