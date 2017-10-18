@@ -6,6 +6,7 @@ public enum ALLEGIANCE {
 	, FEDERATION
 	, EMPIRE
 	, ALLIANCE
+	, PILOTS_FEDERATION
 	, NONE
 	;
 
@@ -15,7 +16,7 @@ public enum ALLEGIANCE {
 			return ALLEGIANCE.UNKNOWN;
 		}
 		for(ALLEGIANCE allegiance : ALLEGIANCE.values()) {
-			if(allegiance.name().equalsIgnoreCase(in)) {
+			if(allegiance.name().replaceAll("_", " ").equalsIgnoreCase(in)) {
 				return allegiance;
 			}
 		}

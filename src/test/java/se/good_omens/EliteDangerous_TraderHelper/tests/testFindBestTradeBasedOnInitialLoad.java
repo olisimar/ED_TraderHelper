@@ -35,12 +35,13 @@ public class testFindBestTradeBasedOnInitialLoad {
 			ParseSystemJSON sysParser = new ParseSystemJSON(FileHandler.readFile(systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter() + "rawData"+ systemData.getDirectoryDelimiter(), "systems_populated.json"));
 			System.out.println((System.currentTimeMillis() - startTime) +"ms");
 			System.out.print("Parsing of files: ");
-			sParser.parseStationJSON();
+			
+			sParser.run();
 			sysParser.parseSystemJSON();
+			
 			TreeMap<Long, Station> stations = sParser.getStations();
 			System.out.println((System.currentTimeMillis() - startTime) +"ms");
 			
-			System.out.print("Listings loaded onto stations: ");
 			stations = new ParseListings().parseListings(FileHandler.readFile(systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter() + "rawData"+ systemData.getDirectoryDelimiter(), "listings.csv"), stations);
 			System.out.println((System.currentTimeMillis() - startTime) +"ms");
 			
@@ -110,7 +111,7 @@ public class testFindBestTradeBasedOnInitialLoad {
 			calc.run();
 			counter = 1;
 			System.out.println("\n Specific base : "+ userData.getCurrentStation().getBaseName() +" {"+ userData.getCurrentSystem().getName() +"}");
-			while (counter <= 99) {
+			while (counter <= calc.getPossibleTrades().size()) {
 				TradeResult result = calc.getPossibleTrades().pollFirst();
 				if (result != null && result.getFromStation().getId() == userData.getCurrentStation().getId()) {
 					TreeSet<TradeResult> returnTrade = new TreeSet<TradeResult>(

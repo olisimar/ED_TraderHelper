@@ -85,7 +85,7 @@ public class ParseStationJSON implements Runnable {
 				while (iter.hasNext()) {
 					Station current = this.parseSingleStationJSON(iter.next());
 					stations.put(current.getId(), current);
-					this.parsedStations++;					
+					this.parsedStations++;
 				}
 			}
 		} catch (ParseException e) {
