@@ -46,8 +46,8 @@ public class ParseListings {
 				com.setSupply(new Integer(item[3]).intValue());
 				com.setSellingPrice(new Integer(item[5]).intValue());
 
-				com.setBuyingPrice(new Integer(item[4]).intValue());
-				com.setDemand(new Integer(item[6]).intValue());
+				try {com.setBuyingPrice(new Integer(item[4]).intValue());} catch(NumberFormatException nfe) {com.setBuyingPrice(0);}
+				try {com.setDemand(new Integer(item[6]).intValue());} catch(NumberFormatException nfe) {com.setDemand(0);}
 				statCommoditiesTotal++;
 				if (com.getSupply() != 0) {
 					com.setSold(true);
