@@ -1,5 +1,8 @@
 package se.good_omens.EliteDangerous_TraderHelper.tests;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -29,6 +32,7 @@ public class testFindBestTradeBasedOnInitialLoad {
 	public void verifyDataIsAvailable() {
 		try {
 			long startTime = System.currentTimeMillis();
+			System.out.println(systemData.getWorkingDirectory());
 			System.out.print("Loading of files: ");
 			ParseModules mParser = new ParseModules(FileHandler.readFile(systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter() + "rawData"+ systemData.getDirectoryDelimiter(), "modules.json"));
 			ParseStationJSON sParser = new ParseStationJSON(FileHandler.readFile(systemData.getWorkingDirectory() + systemData.getDirectoryDelimiter() + "rawData"+ systemData.getDirectoryDelimiter(), "stations.json"), mParser);
@@ -111,19 +115,35 @@ public class testFindBestTradeBasedOnInitialLoad {
 			calc.run();
 			counter = 1;
 			System.out.println("\n Specific base : "+ userData.getCurrentStation().getBaseName() +" {"+ userData.getCurrentSystem().getName() +"}");
+			TreeMap<Integer, List<TradeResult>> bestTrades = new TreeMap<>();
+			
 			while (counter <= calc.getPossibleTrades().size()) {
 				TradeResult result = calc.getPossibleTrades().pollFirst();
 				if (result != null && result.getFromStation().getId() == userData.getCurrentStation().getId()) {
 					TreeSet<TradeResult> returnTrade = new TreeSet<TradeResult>(
 					    calc.findPossibleTrades(result.getToStation(), result.getFromStation()));
 					if (counter < 10) {
-						System.out.println("[0" + counter + "]  " + result + " <-> " + returnTrade.pollFirst());
+						//System.out.println("[0" + counter + "]  " + result + " <-> " + returnTrade.pollFirst());
 					} else {
-						System.out.println("[" + counter + "]  " + result + " <-> " + returnTrade.pollFirst());
+						//System.out.println("[" + counter + "]  " + result + " <-> " + returnTrade.pollFirst());
 					}
+					int netGain = result.getExpectedProfit() + returnTrade.pollFirst().getExpectedProfit();
+					ArrayList<TradeResult> trades = new ArrayList<>();
+					trades.add(result); trades.add(returnTrade.pollFirst());
+					bestTrades.put(netGain, trades);
 				}
 				counter++;
 			}
+			
+			counter = 1;
+			while(counter < 11) {
+				Entry<Integer, List<TradeResult>> item = bestTrades.lastEntry();
+				System.out.print(counter +"> Profit: "+ item.getKey() +" ### ");
+				System.out.println(item.getValue().get(0) +" <--> "+ item.getValue().get(1));
+				counter++;
+				bestTrades.remove(item.getKey());
+			}
+				
 			/**/
 		} catch (FileMissingException e) {
 			// TODO Auto-generated catch block
