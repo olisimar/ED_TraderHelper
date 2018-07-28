@@ -130,6 +130,7 @@ public class BaseCommodity implements Commodity {
 	 * @param buyingPrice
 	 */
 	public int getBuyingPrice() {
+//		System.out.println("Buying price: "+ buyingPrice);
 		return this.buyingPrice;
 	}
 

@@ -1,5 +1,6 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -16,6 +17,8 @@ public class UserData {
 	private Map<Long, StarSystem>	galaxy;
 	private double								loadedJumpRange		= 0;
 	private int										maxJumps					= 0;
+	private int										maxDataAge				= 99;
+	private int										maxDistInSystem		= 99999;
 	private boolean								planetaryLanding	= true;
 	private SHIP_TYPE							shipType					= SHIP_TYPE.SIDEWINDER_MK_1;
 	private int										creditAvailable		= 0;
@@ -31,6 +34,8 @@ public class UserData {
 		this.shipType = SHIP_TYPE.fromString(properties.getEntry("shipType"));
 		this.maxCargoHold = Integer.parseInt(properties.getEntry("cargoHoldSize"));
 		this.creditAvailable = Integer.parseInt(properties.getEntry("creditAvailable"));
+		this.maxDataAge = Integer.parseInt(properties.getEntry("maxDataAge"));
+		this.setMaxDistInSystem(Integer.parseInt(properties.getEntry("maxDistInSystem")));
 
 		setStationBasedOnId(properties);
 		calculateCurrentBubble();
@@ -140,5 +145,24 @@ public class UserData {
 	public void setCurrentSystem(StarSystem system) {
 		this.currentSystem = system;
 		calculateCurrentBubble();
+	}
+
+	public Date getMaxDataAge() {
+		Date toReturn = new Date();
+		long tmp = new Date().getTime() - (maxDataAge * 24 * 60 * 60 * 1000);
+		toReturn.setTime(tmp);
+		return toReturn;
+	}
+
+	public void setMaxDataAge(int maxDataAge) {
+		this.maxDataAge = maxDataAge;
+	}
+
+	public int getMaxDistInSystem() {
+		return maxDistInSystem;
+	}
+
+	public void setMaxDistInSystem(int maxDistInSystem) {
+		this.maxDistInSystem = maxDistInSystem;
 	}
 }

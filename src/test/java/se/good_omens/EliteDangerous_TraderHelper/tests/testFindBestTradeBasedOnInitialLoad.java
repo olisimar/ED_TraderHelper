@@ -81,41 +81,80 @@ public class testFindBestTradeBasedOnInitialLoad {
 
 			Assert.assertNotEquals(systems.size(), userData.getCurrentBubble().size());
 
-			System.out.println(userData.getCurrentBubble().size() + " in the current bubble.");
+			System.out.println(userData.getCurrentBubble().size() + " systems in the current bubble.");
+			int noStations = 0;
+			for(StarSystem starSystem : userData.getCurrentBubble().values()) {
+				noStations += starSystem.getStations().size();
+			}
+			System.out.println(noStations + " stations in the current bubble.");
 
 			System.out.println("TradeCalculation has started.");
-			TradeCalculator calc = new TradeCalculator(userData);
 			long calcTime = System.currentTimeMillis();
+
+			TradeCalculator calc = new TradeCalculator(userData);
 			Thread calcThread = new Thread(calc);
 			calcThread.run();
-
 			
 			System.out.println("Calculation took: "+ (System.currentTimeMillis() - calcTime) +"ms or "+ ((System.currentTimeMillis() - calcTime) / 1000) +"s" );
 			System.out.println(calc.getTotalNumberOfStationsLookedAt() + " stations looked at for trade. "+ calc.getPossibleTrades().size() + " possible trades.");
 			
 
 			int counter = 1;
-			/**/
-			while (counter <= 30) {
-				TradeResult result = calc.getPossibleTrades().pollFirst();
-				if (result != null) {
-					TreeSet<TradeResult> returnTrade = new TreeSet<TradeResult>(
-					    calc.findPossibleTrades(result.getToStation(), result.getFromStation()));
-					if (counter < 10) {
-						System.out.println("[0" + counter + "]  " + result + " <-> " + returnTrade.pollFirst());
-					} else {
-						System.out.println("[" + counter + "]  " + result + " <-> " + returnTrade.pollFirst());
+			int noToPrint = 30;
+			
+			TreeMap<Integer, List<TradeResult>> bestTradesBubble = new TreeMap<>();
+			TreeMap<Integer, List<TradeResult>> bestTradesStation = new TreeMap<>();
+			
+			for(TradeResult trade : calc.getPossibleTrades()) {
+				TradeResult returnTrade = new TreeSet<TradeResult>(calc.findPossibleTrades(trade.getToStation(), trade.getFromStation())).pollFirst();
+				if(returnTrade != null) {
+					int netGain = trade.getExpectedProfit() + returnTrade.getExpectedProfit();
+					ArrayList<TradeResult> trades = new ArrayList<>();
+					trades.add(trade); trades.add(returnTrade);
+					bestTradesBubble.put(netGain, trades);
+					if(trade.getFromStation() == userData.getCurrentStation()) {
+						bestTradesStation.put(netGain, trades);
 					}
+				}
+			}
+			if(bestTradesBubble.size() < 31) {
+				noToPrint = calc.getPossibleTrades().size();
+			}
+			
+			/* Printing the best Bubble here */
+			System.out.println("\n> Best trades in bubble.");
+			while (counter <= noToPrint) {
+				Entry<Integer, List<TradeResult>> trade = bestTradesBubble.pollLastEntry();
+				TradeResult result = trade.getValue().get(0);
+				TradeResult returnTrade = trade.getValue().get(1);
+				if (counter < 10) {
+					System.out.println("[0" + counter +" - "+ trade.getKey() +"]  " + result + " <-> " + returnTrade);
 				} else {
-					counter = 30;
+					System.out.println("[" + counter +" - "+ trade.getKey() +"]  " + result + " <-> " + returnTrade);
 				}
 				counter++;
 			}
 
+			/* Printing the best Bubble here */
+			System.out.println("\n> Best trade for Station "+ userData.getCurrentStation().getBaseName() +".");
+			counter = 1;
+			while (counter <= 10) {
+				Entry<Integer, List<TradeResult>> trade = bestTradesStation.pollLastEntry();
+				TradeResult result = trade.getValue().get(0);
+				TradeResult returnTrade = trade.getValue().get(1);
+				if (counter < 10) {
+					System.out.println("[0" + counter +" - "+ trade.getKey() +"]  " + result + " <-> " + returnTrade);
+				} else {
+					System.out.println("[" + counter +" - "+ trade.getKey() +"]  " + result + " <-> " + returnTrade);
+				}
+				counter++;
+			}
+/*
+			
+			
 			calc.run();
 			counter = 1;
-			System.out.println("\n Specific base : "+ userData.getCurrentStation().getBaseName() +" {"+ userData.getCurrentSystem().getName() +"}");
-			TreeMap<Integer, List<TradeResult>> bestTrades = new TreeMap<>();
+//			System.out.println("\n Specific base : "+ userData.getCurrentStation().getBaseName() +" {"+ userData.getCurrentSystem().getName() +"}");
 			
 			while (counter <= calc.getPossibleTrades().size()) {
 				TradeResult result = calc.getPossibleTrades().pollFirst();
@@ -136,14 +175,18 @@ public class testFindBestTradeBasedOnInitialLoad {
 			}
 			
 			counter = 1;
-			while(counter < 11) {
-				Entry<Integer, List<TradeResult>> item = bestTrades.lastEntry();
-				System.out.print(counter +"> Profit: "+ item.getKey() +" ### ");
-				System.out.println(item.getValue().get(0) +" <--> "+ item.getValue().get(1));
-				counter++;
-				bestTrades.remove(item.getKey());
+			if(!bestTrades.isEmpty()) {
+				while(counter < 11) {
+					Entry<Integer, List<TradeResult>> item = bestTrades.lastEntry();
+					System.out.print(counter +"> Profit: "+ item.getKey() +" ### ");
+					System.out.println(item.getValue().get(0) +" <--> "+ item.getValue().get(1));
+					counter++;
+					bestTrades.remove(item.getKey());
+				}
+			} else {
+				System.out.println("No trades for choosen station, "+ userData.getCurrentStation().getBaseName() +".");
 			}
-				
+			*/	
 			/**/
 		} catch (FileMissingException e) {
 			// TODO Auto-generated catch block

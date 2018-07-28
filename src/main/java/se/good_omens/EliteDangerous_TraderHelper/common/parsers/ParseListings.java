@@ -36,6 +36,9 @@ public class ParseListings {
 	private TreeMap<Long, Station> addListingToStations(String listing, TreeMap<Long, Station> stations) {
 		String[] item = listing.split(",");
 		if (!item[0].equals("id")) {
+// 0:id	1:station_id	2:commodity_id	3:supply	4:supply_bracket	5:buy_price	6:sell_price	7:demand	8:demand_bracket	9:collected_at
+// 1	1	5	0	0	0	504	1526	2	1532605876
+
 			// 0:id, 1:station id, 2:commodity id, 3:supply, 4:buy_price, 5:sell_price, 6:demand
 			// id,station_id,commodity_id,supply,buy_price,sell_price,demand,collected_at
 			// 1,1,5,0,0,476,1065,1500915774
@@ -44,10 +47,10 @@ public class ParseListings {
 				COMMODITY_DATA data = COMMODITY_DATA.fromInt(new Integer(item[2]).intValue());
 				BaseCommodity com = new BaseCommodity(data);
 				com.setSupply(new Integer(item[3]).intValue());
-				com.setSellingPrice(new Integer(item[5]).intValue());
+				com.setSellingPrice(new Integer(item[6]).intValue());
 
-				try {com.setBuyingPrice(new Integer(item[4]).intValue());} catch(NumberFormatException nfe) {com.setBuyingPrice(0);}
-				try {com.setDemand(new Integer(item[6]).intValue());} catch(NumberFormatException nfe) {com.setDemand(0);}
+				try {com.setBuyingPrice(new Integer(item[5]).intValue());} catch(NumberFormatException nfe) {com.setBuyingPrice(0);}
+				try {com.setDemand(new Integer(item[7]).intValue());} catch(NumberFormatException nfe) {com.setDemand(0);}
 				statCommoditiesTotal++;
 				if (com.getSupply() != 0) {
 					com.setSold(true);

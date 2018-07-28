@@ -1,5 +1,6 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.parsers;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.TreeMap;
 
@@ -144,6 +145,14 @@ public class ParseStationJSON implements Runnable {
 				}
 				if(data.get("is_planetary") != null) {
 					current.setPlanetary(Boolean.parseBoolean(data.get("is_planetary").toString()));
+				}
+				if(data.get("market_updated_at") != null) {
+					long tmp = Long.parseLong(data.get("market_updated_at").toString());
+					tmp = tmp * 1000;
+					current.setStationUpdatedAt(new Date(tmp));
+				}
+				if(data.get("distance_to_star") != null) {
+					current.setDistanceToStar(Integer.parseInt(data.get("distance_to_star").toString()));
 				}
 				if ((data.get("economies") != null) && (data.get("economies") instanceof JSONArray)) {
 					JSONArray economies = (JSONArray) data.get("economies");

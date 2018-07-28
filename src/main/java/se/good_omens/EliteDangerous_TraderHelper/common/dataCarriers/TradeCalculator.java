@@ -49,10 +49,22 @@ public class TradeCalculator extends Thread implements Runnable {
 			return false;
 		}
 		if(!station.getMaxLandingPadSize().sizeAppropiate(userData.getShipType().getSize())) {
+//			System.out.println(station.getBaseName() +": Removed due to being too small to shipsize("+ station.getMaxLandingPadSize() +")");
 			return false;
 		}
 		if(!userData.isPlanetaryLanding()) {
 			if(station.isPlanetary()) {
+//				System.out.println(station.getBaseName() +": Removed due to being planetary.");
+				return false;
+			}
+		}
+		if(userData.getMaxDataAge().after(station.getStationUpdatedAt())) {
+//			System.out.println(station.getBaseName() +": Removed due to dataAge. ("+ station.getStationUpdatedAt() +")");
+			return false;
+		}
+		if(station.getDistanceToStar() > userData.getMaxDistInSystem()) {
+			if(userData.getCurrentStation() != station) {
+//				System.out.println(station.getBaseName() +": Removed due to distance from star. ("+ station.getDistanceToStar() +")");
 				return false;
 			}
 		}
