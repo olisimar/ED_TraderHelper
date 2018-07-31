@@ -3,7 +3,7 @@ package se.good_omens.EliteDangerous_TraderHelper.common.dataCarriers;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_CATEGORY;
 import se.good_omens.EliteDangerous_TraderHelper.common.enums.COMMODITY_DATA;
 import se.good_omens.EliteDangerous_TraderHelper.common.interfaces.Commodity;
-import se.good_omens.xmlModel.XmlNode;
+import se.good_omens.EliteDangerous_TraderHelper.common.utils.XML.XmlNode;
 
 /**
  * Describes a commodity used by a station. These stats should be considered as
@@ -158,7 +158,7 @@ public class BaseCommodity implements Commodity {
 		toReturn.addAttribute("illegal", this.isIllegal().toString());
 		toReturn.addAttribute("rare", rare.toString());
 
-		return null;
+		return toReturn;
 	}
 
 	/**

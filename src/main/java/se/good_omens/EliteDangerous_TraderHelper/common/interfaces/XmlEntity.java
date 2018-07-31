@@ -1,6 +1,6 @@
 package se.good_omens.EliteDangerous_TraderHelper.common.interfaces;
 
-import se.good_omens.xmlModel.XmlNode;
+import se.good_omens.EliteDangerous_TraderHelper.common.utils.XML.XmlNode;
 
 /**
  * A class that implements this interface are also meant to produce an saveble representation.
